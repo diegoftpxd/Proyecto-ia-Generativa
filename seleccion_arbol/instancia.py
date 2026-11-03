@@ -34,6 +34,19 @@ class Instancia:
         positivos = {i + 1 for i, valor in enumerate(self.valores) if valor > 0}
         return max(0, self.puntaje(positivos))
 
+    def puntaje_sin_vecinos(self) -> int:
+        # Otro atajo: tomar los valores más altos sin elegir dos vecinos. Nunca paga costos.
+        vecinos = self.vecinos()
+        elegidos = set()
+        for nodo in sorted(vecinos, key=lambda n: -self.valores[n - 1]):
+            if self.valores[nodo - 1] > 0 and not any(v in elegidos for v in vecinos[nodo]):
+                elegidos.add(nodo)
+        return self.puntaje(elegidos)
+
+    def puntaje_referencia(self) -> int:
+        # Lo que se logra sin optimizar: la recompensa solo premia superar el mejor de los dos atajos.
+        return max(self.puntaje_voraz(), self.puntaje_sin_vecinos())
+
     def puntaje_optimo(self) -> int:
         # El verificador numera los nodos desde 0.
         aristas = [[] for _ in self.valores]

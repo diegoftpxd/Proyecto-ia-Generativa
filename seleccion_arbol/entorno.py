@@ -5,13 +5,19 @@ from dataclasses import dataclass
 from generador import Nivel, generar_instancia
 from instancia import Instancia
 from modelo import ModeloLLM, ModeloLMStudio
-from prompt import generar_prompt
+from prompt import generar_prompt, leer_prompt
 
 RECOMPENSA_FORMATO_INVALIDO = -1.0
-RECOMPENSA_VORAZ = 0.5  # Igualar la regla simple vale esto; el resto se gana al superarla
+RECOMPENSA_REFERENCIA = 0.5  # Igualar el mejor atajo vale esto; el resto se gana al superarlo
 
-PATRON_BLOQUE = re.compile(r"<respuesta>(.*?)</respuesta>", re.DOTALL)
-PATRON_NODOS = re.compile(r"\s*(?:\d{1,6}(?:[\s,]+\d{1,6})*)?\s*", re.ASCII)
+APERTURA, CIERRE = "<respuesta>", "</respuesta>"
+LARGO_MAXIMO_BLOQUE = 2000  # Sobra para cualquier nivel. Evita que un texto enorme vuelva lento al parser
+_SEPARADOR = r"(?:\s*[,;]\s*|\s+)(?:[ye]\s+)?"
+PATRON_NODOS = re.compile(
+    rf"\s*(?:nodos?\s*:?\s*)?[\[{{(]?\s*(?:\d{{1,6}}(?:{_SEPARADOR}\d{{1,6}})*)?\s*[\]}})]?\s*\.?\s*",
+    re.ASCII | re.IGNORECASE,
+)
+PATRON_NINGUNO = re.compile(r"\s*(?:ningun[oa]|vac[ií]o|none)\s*\.?\s*", re.IGNORECASE)
 
 
 class ErrorFormato(ValueError):
@@ -23,19 +29,35 @@ class Resultado:
     recompensa: float
     puntaje: int | None
     puntaje_voraz: int
+    puntaje_referencia: int
     puntaje_optimo: int
     error: str | None
 
 
-def parsear_respuesta(instancia: Instancia, respuesta: str) -> set[int]:
+def _ultimo_bloque(respuesta: str) -> str:
     # Se usa el último bloque porque el modelo puede razonar antes de responder.
-    bloques = PATRON_BLOQUE.findall(respuesta)
-    if not bloques:
+    texto = respuesta.lower()
+    fin = texto.rfind(CIERRE)
+    inicio = texto.rfind(APERTURA, 0, fin) if fin != -1 else -1
+    if inicio == -1:
         raise ErrorFormato("Falta el bloque <respuesta>...</respuesta>")
-    if PATRON_NODOS.fullmatch(bloques[-1]) is None:
+    # Una apertura previa sin cerrar es un bloque anidado: no se sabe cuál es la respuesta.
+    if texto.rfind(APERTURA, 0, inicio) > texto.rfind(CIERRE, 0, inicio):
+        raise ErrorFormato("El bloque <respuesta> no debe estar anidado")
+    bloque = texto[inicio + len(APERTURA):fin]
+    if len(bloque) > LARGO_MAXIMO_BLOQUE:
+        raise ErrorFormato("El bloque <respuesta> es demasiado largo")
+    return " ".join(bloque.split())
+
+
+def parsear_respuesta(instancia: Instancia, respuesta: str) -> set[int]:
+    bloque = _ultimo_bloque(respuesta)
+    if PATRON_NINGUNO.fullmatch(bloque) is not None:
+        return set()
+    if PATRON_NODOS.fullmatch(bloque) is None:
         raise ErrorFormato("El bloque <respuesta> solo debe contener números de nodos")
 
-    nodos = [int(nodo) for nodo in re.split(r"[\s,]+", bloques[-1].strip()) if nodo]
+    nodos = [int(nodo) for nodo in re.findall(r"\d+", bloque, re.ASCII)]
     if len(nodos) != len(set(nodos)):
         raise ErrorFormato("Hay nodos repetidos")
     if any(not 1 <= nodo <= instancia.cantidad_nodos for nodo in nodos):
@@ -43,27 +65,35 @@ def parsear_respuesta(instancia: Instancia, respuesta: str) -> set[int]:
     return set(nodos)
 
 
-def calcular_recompensa(puntaje: int, voraz: int, optimo: int) -> float:
-    # Peor que la regla simple: de 0 a RECOMPENSA_VORAZ. Mejor que ella: de RECOMPENSA_VORAZ a 1.
-    if optimo == voraz:
-        # No hay nada que superar. El generador lo evita, pero una instancia a mano sí podría.
-        return max(0, puntaje) / optimo if optimo > 0 else float(puntaje == 0)
-    if puntaje <= voraz:
-        return RECOMPENSA_VORAZ * max(0, puntaje) / voraz if voraz > 0 else 0.0
-    return RECOMPENSA_VORAZ + (1 - RECOMPENSA_VORAZ) * (puntaje - voraz) / (optimo - voraz)
+def calcular_recompensa(puntaje: int, referencia: int, optimo: int) -> float:
+    if optimo <= 0:
+        return float(puntaje == 0)
+    # Si no hay nada que superar, o la referencia no aporta, la recompensa es proporcional al óptimo.
+    if referencia <= 0 or referencia == optimo:
+        return max(0, puntaje) / optimo
+    # Peor que la referencia: de 0 a RECOMPENSA_REFERENCIA. Mejor que ella: de RECOMPENSA_REFERENCIA a 1.
+    if puntaje <= referencia:
+        return RECOMPENSA_REFERENCIA * max(0, puntaje) / referencia
+    return RECOMPENSA_REFERENCIA + (1 - RECOMPENSA_REFERENCIA) * (puntaje - referencia) / (optimo - referencia)
 
 
 def evaluar_respuesta(instancia: Instancia, respuesta: str) -> Resultado:
     voraz = instancia.puntaje_voraz()
+    referencia = instancia.puntaje_referencia()
     optimo = instancia.puntaje_optimo()
 
     try:
         seleccion = parsear_respuesta(instancia, respuesta)
     except ErrorFormato as error:
-        return Resultado(RECOMPENSA_FORMATO_INVALIDO, None, voraz, optimo, str(error))
+        return Resultado(RECOMPENSA_FORMATO_INVALIDO, None, voraz, referencia, optimo, str(error))
 
     puntaje = instancia.puntaje(seleccion)
-    return Resultado(calcular_recompensa(puntaje, voraz, optimo), puntaje, voraz, optimo, None)
+    return Resultado(calcular_recompensa(puntaje, referencia, optimo), puntaje, voraz, referencia, optimo, None)
+
+
+def reward(prompt: str, completion: str) -> float:
+    # La interfaz común del curso: basta con el prompt y lo que respondió el modelo.
+    return evaluar_respuesta(leer_prompt(prompt), completion).recompensa
 
 
 class EntornoSeleccion:

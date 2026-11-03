@@ -64,7 +64,19 @@ Cada episodio tiene un solo paso, con la misma forma `reset` y `step` que usan o
 
 1. `reset(nivel)` crea un árbol y devuelve el prompt.
 2. El modelo genera su respuesta.
-3. `step(respuesta)` devuelve un `Resultado` con la recompensa, el puntaje, el puntaje de la regla simple, el óptimo y el error, si lo hubo.
+3. `step(respuesta)` devuelve un `Resultado` con la recompensa, el puntaje, los puntajes de referencia, el óptimo y el error, si lo hubo.
+
+### Interfaz común
+
+`reward(prompt, completion) -> float`, en `entorno.py`, califica sin ningún estado guardado: reconstruye el árbol desde el prompt y lanza `ValueError` si el prompt no es de este ambiente.
+
+```python
+from entorno import reward
+
+reward(prompt, "Razono...\n<respuesta>1 3</respuesta>")  # Devuelve un valor entre -1 y 1
+```
+
+Un intento pasa (pass) cuando su recompensa es 1, es decir, cuando logra el óptimo.
 
 ### Niveles
 
@@ -83,35 +95,54 @@ La dificultad sube con el tamaño del árbol, el rango de valores y el costo má
 
 ### Generación de árboles
 
-Cada nodo se conecta con uno anterior elegido al azar, y luego se barajan los números para ocultar la raíz. El generador descarta un árbol si su óptimo no es positivo o si la regla simple rinde demasiado, con un máximo de 2000 intentos por árbol.
+Cada nodo se conecta con uno anterior elegido al azar. Luego se barajan los números, el orden de las conexiones y su sentido para ocultar la raíz. El generador descarta un árbol si su óptimo no es positivo o si un atajo rinde demasiado, con un máximo de 2000 intentos por árbol.
 
-### Regla simple
+### Atajos
 
-La regla simple, llamada `voraz` en el código, elige todos los nodos con valor positivo, o ninguno si eso resta puntos. Sirve de referencia: un modelo que no la supera no está mostrando más que esa intuición.
+Hay dos estrategias que no optimizan y sirven de referencia:
 
-El generador solo acepta árboles donde la regla logra como máximo el 70% del óptimo (`voraz_maximo` en `Nivel`). El camino del ejemplo anterior es un caso hecho a mano: allí la regla logra el 80%, así que el generador lo descartaría.
+- **Regla simple** (`voraz` en el código): elige todos los nodos positivos, o ninguno si eso resta puntos.
+- **Sin vecinos:** toma los valores más altos sin elegir dos nodos conectados, así que nunca paga costos.
+
+El generador exige que la regla simple logre como máximo el 70% del óptimo (`voraz_maximo` en `Nivel`). Desde el nivel 3, además, el mejor atajo no puede pasar del 90% (`atajo_maximo`), así que ningún atajo llega al óptimo. Los niveles 1 y 2 no tienen este segundo filtro a propósito: dejan aciertos alcanzables para que el modelo tenga señal de la que aprender.
+
+El camino del ejemplo anterior es un caso hecho a mano: allí la regla simple logra el 80%, así que el generador lo descartaría.
 
 ### Recompensa
 
-Igualar la regla simple vale 0,5, y el resto solo se gana superándola. Así el modelo tiene una señal para mejorar incluso si no llega al óptimo.
+Igualar el mejor atajo vale 0,5, y el resto solo se gana superándolo. Así, seguir un atajo no da una recompensa alta, y el modelo tiene señal para mejorar aunque no llegue al óptimo.
 
 | Respuesta | Recompensa | Cálculo |
 | --- | --- | --- |
 | Inválida | -1 | Fijo |
 | Puntaje negativo o cero | 0 | Fijo |
-| Bajo la regla simple | De 0 a 0,5 | 0,5 × puntaje / regla |
-| Igual a la regla simple | 0,5 | Fijo, si la regla da más de 0 |
-| Sobre la regla simple | De 0,5 a 1 | 0,5 + 0,5 × (puntaje - regla) / (óptimo - regla) |
+| Bajo el mejor atajo | De 0 a 0,5 | 0,5 × puntaje / atajo |
+| Igual al mejor atajo | 0,5 | Fijo, si el atajo no llega al óptimo |
+| Sobre el mejor atajo | De 0,5 a 1 | 0,5 + 0,5 × (puntaje - atajo) / (óptimo - atajo) |
 | Óptima | 1 | Fijo |
+| Si un atajo ya logra el óptimo (niveles 1 y 2) | De 0 a 1 | puntaje / óptimo |
 
 ### Formato de respuesta
 
-El modelo puede razonar antes de responder, porque solo se lee el último bloque `<respuesta>...</respuesta>`. La respuesta es inválida en estos casos:
+El modelo puede razonar antes de responder, porque solo se lee el último bloque `<respuesta>...</respuesta>`.
 
-- No hay ningún bloque completo.
-- El bloque contiene algo distinto de números separados por espacios o comas.
+Se aceptan formas equivalentes: cualquier orden, separadores como espacios, comas o punto y coma, `1 y 3`, `nodos 1, 3`, `{1, 3}` y `ninguno` para una selección vacía.
+
+La respuesta es inválida en estos casos:
+
+- No hay ningún bloque completo, o hay bloques anidados.
+- El bloque contiene otra cosa, como alternativas (`1 3 o 2`), rangos (`1-3`), decimales o texto.
 - Hay nodos repetidos.
 - Algún nodo está fuera del rango de 1 a `n`.
+- El bloque supera los 2000 caracteres.
+
+Entregar varios bloques no da lo mejor de cada uno: solo vale el último. `PruebasReward`, en `test_ambiente.py`, reúne los casos diseñados para engañar al verificador.
+
+### Datasets
+
+`python dataset.py` genera `datos/entrenamiento.jsonl`, `datos/evaluacion.jsonl` y `datos/test.jsonl`. Tienen 800, 20 y 20 árboles por nivel (734 en el entrenamiento del nivel 1). Ningún árbol se repite entre particiones, ni siquiera cambiando la numeración de sus nodos.
+
+Cada ejemplo trae `prompt`, `respuesta`, `razonamiento`, el árbol y sus puntajes de referencia. La respuesta y el razonamiento se calculan por código y se comprueban con el verificador. Si un árbol tiene varias soluciones óptimas, se guarda una: para calificar, usa `reward` en vez de comparar el texto.
 
 ### Verificación del óptimo
 
@@ -126,7 +157,7 @@ Cualquier modelo sirve si implementa `ModeloLLM.generar(prompt)`, que recibe el 
 | `ModeloLMStudio` | `modelo.py` | En tu PC, con la API de LM Studio |
 | `ModeloTransformers` | `modelo_hf.py` | En Colab o donde haya GPU, con Hugging Face |
 
-`ModeloTransformers` agrega un tope de razonamiento: si a los 8192 tokens sigue abierto `<think>`, lo cierra y deja que el modelo continúe hasta 12000 tokens en total.
+Ambas clases usan dos presupuestos: `tokens_pensamiento` (8192 por defecto) y `tokens_respuesta` (200). Si el modelo agota el primero, se cierra su razonamiento, se escribe `<respuesta>` y debe completar los nodos con el segundo. Si esa lista también se corta, la respuesta es inválida.
 
 ### Evaluación comparable
 
@@ -153,7 +184,7 @@ cd Proyecto-ia-Generativa/seleccion_arbol
 python -m unittest test_ambiente
 ```
 
-Deben pasar las 17 pruebas. Sin `numpy`, `test_mismos_arboles_y_reanuda` falla al llegar a `resumir`; las demás no lo necesitan.
+Deben pasar las 44 pruebas. Se comprobó en el entorno de conda `tipico`, que tiene `pandas` y `numpy`.
 
 ### 2. Probar el ambiente sin un modelo
 
@@ -199,7 +230,8 @@ En la RTX 2050 usada para las pruebas, cada episodio tardó entre 26 y 341 segun
 | `NIVELES_A_EVALUAR` | `[2, 3, 4, 5]` | Niveles que se evalúan |
 | `EPISODIOS` | `5` | Episodios por nivel |
 | `SEMILLA` | `0` | Árboles generados |
-| `RUTA` | `.../seleccion_arbol/resultados_con_tope.jsonl` | Archivo de resultados en Drive |
+| `RUTA` | `.../seleccion_arbol/resultados_presupuesto.jsonl` | Archivo de resultados en Drive |
+| `PRESUPUESTO` | `tokens_pensamiento=8192, tokens_respuesta=200` | Tokens para razonar y para responder |
 | `MODELOS` | 5 modelos | Modelos que se comparan |
 
 Los resultados quedan en Drive, así que puedes volver a ejecutar tras un corte de sesión. Con Qwen 2B, un episodio que agotó los tokens tardó entre 10 y 12 minutos.
@@ -230,7 +262,9 @@ Esa misma clase funciona con `evaluar_modelo`.
 
 ## Cómo leer los resultados
 
-La recompensa debe compararse con 0,5, que es lo que vale igualar la regla simple. Por encima de 0,5 el modelo la superó, y -1 significa que no entregó una respuesta válida.
+La métrica principal es pass@k. **pass@1** es la proporción de intentos que logran el óptimo, y **pass@k** la de árboles donde lo logra al menos uno de k intentos. `resumir_pass(ruta, k)` las calcula por modelo y nivel.
+
+La recompensa debe compararse con 0,5, que es lo que vale igualar el mejor atajo. Por encima de 0,5 el modelo lo superó, y -1 significa que no entregó una respuesta válida.
 
 Este es un ejemplo de lo que imprime la evaluación por cada episodio:
 
@@ -246,7 +280,9 @@ Qwen3.5 2B nivel 2 ep 1: recompensa=-1.000 puntaje=None óptimo=15 697.9s 12000t
 | Segundos | Duración del episodio |
 | Tokens | Tokens generados; igual al máximo si el modelo se cortó |
 
-El archivo JSONL guarda además `puntaje_voraz`, `error`, `respuesta` y, con `ModeloTransformers`, `texto_completo` y `razonamiento_cerrado`. Si tienes `pandas`, `resumir(ruta)` agrupa todo por modelo y nivel.
+El archivo JSONL guarda además `puntaje_voraz`, `puntaje_sin_vecinos`, `error`, `fin`, `respuesta`, `texto_completo` y `respuesta_forzada`. Con `pandas`, `resumir(ruta)` agrupa todo por modelo y nivel.
+
+Para el baseline en test, usa `baseline_lmstudio.ipynb` con el kernel del entorno de conda `tipico`.
 
 ### Resultados hasta ahora
 
@@ -266,15 +302,17 @@ Cada celda muestra la recompensa y, entre paréntesis, el puntaje frente al ópt
 
 Cada nivel tiene solo 3 episodios, así que estos resultados orientan pero no miden con precisión. De los 7 inválidos, 6 se deben a agotar los tokens y no a una mala selección. Por eso conviene reportar los cortes aparte de la recompensa media.
 
-En Colab con los pesos originales, los 2 primeros episodios del nivel 2 se cortaron a los 12000 tokens. Eso ocurrió antes de agregar el tope de razonamiento, que aún no se ha probado con un modelo real.
+En Colab con los pesos originales, los 2 primeros episodios del nivel 2 se cortaron a los 12000 tokens. Todos estos resultados son anteriores a los presupuestos de tokens, a la referencia del mejor atajo y al filtro desde el nivel 3, así que no se comparan directamente con los actuales. La línea base vigente se obtiene con `baseline_lmstudio.ipynb`.
 
 ## Limitaciones conocidas
 
 El ambiente está probado, pero hay cuatro puntos que afectan cómo leer o usar sus resultados.
 
-- **Salto en la recompensa:** si la regla simple da 0, un puntaje de 0 vale 0, pero cualquier puntaje positivo ya vale más de 0,5. En el nivel 4, un puntaje de 2 sobre 23 recibió 0,543.
-- **Tokens agotados:** un corte vale -1, igual que un error de formato, así que la recompensa mezcla falta de tokens con falta de capacidad.
-- **Diferencia entre LM Studio y Colab:** en local parece existir un tope cerca de 8192 tokens, sin confirmar. El de Colab lo imita, pero el modelo, la cuantización y el muestreo también son distintos, así que sus resultados no son directamente comparables.
-- **Tope de razonamiento parcial:** solo actúa sobre modelos que usan la etiqueta `<think>`. No afecta a los que razonan sin ella o con otra etiqueta.
+- **Otros atajos:** el filtro cubre dos estrategias conocidas. Un modelo podría encontrar otra regla que rinda bien sin optimizar; conviene revisar sus trazas al entrenar.
+- **Niveles 1 y 2:** un atajo logra el óptimo en la mayoría de sus árboles, así que acertar ahí no demuestra que el modelo optimice.
+- **Respuestas forzadas:** se califican igual que las demás, aunque el modelo no terminó de razonar. Por eso conviene mirar `cortes` junto con la recompensa.
+- **Diferencia entre LM Studio y Colab:** el modelo, la cuantización y el muestreo son distintos, así que sus resultados no son directamente comparables.
+- **Plantilla de Qwen:** la respuesta forzada en LM Studio usa el formato de chat de Qwen (`PLANTILLA_QWEN`). Otro modelo puede necesitar uno distinto.
+- **Etiquetas de razonamiento:** el cierre forzado reconoce `<think>`. Un modelo que razone con otra etiqueta recibe `<respuesta>`, pero su razonamiento no se cierra como tal.
 
 El ambiente tampoco incluye un ciclo de entrenamiento: entrega el prompt y la recompensa, y el algoritmo de RL queda por agregar.

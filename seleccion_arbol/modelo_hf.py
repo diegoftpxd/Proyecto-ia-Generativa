@@ -25,17 +25,18 @@ class ModeloTransformers(ModeloLLM):
         nombre: str,
         razonar: bool | None = None,
         temperatura: float = 0.7,
-        tokens_maximos: int = 12000,
-        tokens_razonamiento: int = 8192,
+        tokens_pensamiento: int = 8192,
+        tokens_respuesta: int = 200,
     ):
         self.nombre = nombre
         self.razonar = razonar  # None usa lo que el modelo haga por defecto
         self.temperatura = temperatura
-        self.tokens_maximos = tokens_maximos
-        self.tokens_razonamiento = tokens_razonamiento  # Al llegar aquí, se cierra el razonamiento abierto
+        self.tokens_pensamiento = tokens_pensamiento
+        self.tokens_respuesta = tokens_respuesta
         self.ultimo_tokens = None
+        self.ultimo_fin = None
         self.ultimo_texto = None
-        self.ultimo_razonamiento_cerrado = None
+        self.ultimo_respuesta_forzada = None
         self._modelo = None
         self._tokenizador = None
 
@@ -67,36 +68,45 @@ class ModeloTransformers(ModeloLLM):
         )
         entrada = self._tokenizador(texto_prompt, return_tensors="pt").to(self._modelo.device)
         largo_prompt = entrada["input_ids"].shape[1]
-        limite = min(self.tokens_razonamiento, self.tokens_maximos)
-        self.ultimo_razonamiento_cerrado = False
+        self.ultimo_fin = "stop"
+        self.ultimo_respuesta_forzada = False
 
         with torch.inference_mode():
-            salida = self._continuar(entrada, limite)
+            salida = self._continuar(entrada, self.tokens_pensamiento)
+            texto = self._decodificar(salida, largo_prompt)
 
             # Terminar antes del límite significa que el modelo ya dejó de generar por sí mismo.
-            if salida.shape[1] - largo_prompt == limite < self.tokens_maximos:
-                if razonamiento_abierto(texto_prompt, self._decodificar(salida, largo_prompt)):
-                    cierre = self._tokenizador(
-                        CIERRE_RAZONAMIENTO, add_special_tokens=False, return_tensors="pt"
-                    )["input_ids"].to(salida.device)
-                    salida = torch.cat([salida, cierre], dim=1)
-                    self.ultimo_razonamiento_cerrado = True
-                restantes = self.tokens_maximos - (salida.shape[1] - largo_prompt)
-                if restantes > 0:
-                    salida = self._continuar(
-                        {"input_ids": salida, "attention_mask": torch.ones_like(salida)}, restantes
-                    )
+            if salida.shape[1] - largo_prompt == self.tokens_pensamiento and "</respuesta>" not in texto:
+                self.ultimo_fin = "length"
+                self.ultimo_respuesta_forzada = True
+                cierre = CIERRE_RAZONAMIENTO if razonamiento_abierto(texto_prompt, texto) else "\n"
+                forzado = self._tokenizador(
+                    f"{cierre}<respuesta>", add_special_tokens=False, return_tensors="pt"
+                )["input_ids"].to(salida.device)
+                salida = torch.cat([salida, forzado], dim=1)
+                largo_previo = salida.shape[1]
+                salida = self._continuar(
+                    {"input_ids": salida, "attention_mask": torch.ones_like(salida)},
+                    self.tokens_respuesta,
+                    stop_strings=["</respuesta>"],
+                    tokenizer=self._tokenizador,
+                )
+                texto = self._decodificar(salida, largo_prompt)
+                # Una lista cortada por el presupuesto no se cierra: podría parecer válida sin serlo.
+                if "</respuesta>" not in texto and salida.shape[1] - largo_previo < self.tokens_respuesta:
+                    texto += "</respuesta>"
 
         self.ultimo_tokens = salida.shape[1] - largo_prompt
-        self.ultimo_texto = self._decodificar(salida, largo_prompt)
-        return extraer_respuesta(texto_prompt, self.ultimo_texto)
+        self.ultimo_texto = texto
+        return extraer_respuesta(texto_prompt, texto)
 
-    def _continuar(self, entrada, tokens):
+    def _continuar(self, entrada, tokens, **opciones):
         return self._modelo.generate(
             **entrada,
             max_new_tokens=tokens,
             do_sample=self.temperatura > 0,
             temperature=self.temperatura if self.temperatura > 0 else None,
+            **opciones,
         )
 
     def _decodificar(self, salida, largo_prompt: int) -> str:
