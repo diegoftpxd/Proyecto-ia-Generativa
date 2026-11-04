@@ -271,6 +271,7 @@ class PruebasReward(unittest.TestCase):
             self.assertEqual(reward(self.PROMPT, texto), 0.0, texto)
         negativo = generar_prompt(Instancia((-3,), (), 1))
         self.assertEqual(reward(negativo, "<respuesta>ninguno</respuesta>"), 1.0)
+        self.assertEqual(reward(negativo, "<respuesta>none</respuesta>"), 1.0)
 
     def test_no_se_puede_enganar(self):
         for texto in [
@@ -579,7 +580,7 @@ class PruebasDataset(unittest.TestCase):
             instancia = generar_instancia(nivel, rng)
             seleccion, razonamiento = resolver(instancia)
             self.assertEqual(instancia.puntaje(seleccion), instancia.puntaje_optimo(), instancia)
-            self.assertIn(f"El mejor puntaje es {instancia.puntaje_optimo()}.", razonamiento)
+            self.assertIn(f"The best score is {instancia.puntaje_optimo()}.", razonamiento)
 
     def test_forma_canonica_ignora_la_numeracion(self):
         original = Instancia((5, 6, 5), ((1, 2), (2, 3)), 2)

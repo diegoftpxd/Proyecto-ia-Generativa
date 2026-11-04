@@ -40,7 +40,7 @@ celdas += [
     new_code_cell(
         "from google.colab import drive\n"
         "drive.mount('/content/drive')\n\n"
-        "RUTA = '/content/drive/MyDrive/seleccion_arbol/linea_base_test.jsonl'\n"
+        "RUTA = '/content/drive/MyDrive/seleccion_arbol/linea_base_test_prompt_ingles.jsonl'\n"
         "RUTA_DATOS = 'datos/test.jsonl'\n"
         "PRESUPUESTO = dict(tokens_pensamiento=3400, tokens_respuesta=200)\n"
         "NIVELES_A_EVALUAR = [2, 3, 4, 5, 6]\n"

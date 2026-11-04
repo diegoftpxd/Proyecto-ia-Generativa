@@ -34,24 +34,44 @@ Un camino 1-2-3 con valores 5, 6 y 5, y costo `c = 2`:
 Este es el prompt exacto que recibe el modelo para ese árbol:
 
 ```
-Elige un conjunto de nodos de este árbol para obtener el mayor puntaje posible.
+Choose a set of nodes of the tree below to obtain the highest possible score.
 
-Valor de cada nodo:
+The tree:
+- It has 3 nodes, numbered from 1 to 3, and 2 edges. It is connected and has no cycles.
+- Edges are bidirectional: "a-b" means that a is a neighbor of b and b is a neighbor of a.
+- Each edge is listed exactly once. There are no duplicate edges, and no edge joins a node to itself.
+- Node values are integers and can be positive, zero, or negative.
+- The cost c is the same for every edge.
+
+Node values (node: value):
 1: 5
 2: 6
 3: 5
 
-Conexiones:
+Edges:
 1-2
 2-3
 
-Costo c = 2
+Cost c = 2
 
-Puntaje: cada nodo elegido aporta su valor menos c por cada vecino que también esté elegido. Los nodos no elegidos no aportan nada. Si no eliges ninguno, el puntaje es 0.
+Scoring rules:
+- You may choose any set of nodes: none, some, or all of them. Two neighbors may both be chosen.
+- Each chosen node contributes its value minus c for each of its neighbors that is also chosen.
+- Only direct neighbors matter. Nodes further away do not change a node's contribution.
+- So each edge with both of its nodes chosen lowers the total score by 2c, because each of the two nodes pays c.
+- Nodes that are not chosen contribute 0 and pay no cost.
+- The score is the sum of the contributions of the chosen nodes. Choosing no nodes scores 0.
 
-Termina con los números de los nodos elegidos, por ejemplo:
-<respuesta>2 5 9</respuesta>
-Si no eliges ninguno, escribe <respuesta></respuesta>.
+Example with a different tree, only to show how the score works. It has 3 nodes with values 5, 6, and 5, edges 1-2 and 2-3, and cost c = 2:
+- Choosing nodes 1 and 3 scores 5 + 5 = 10, because they are not neighbors.
+- Choosing nodes 1, 2, and 3 scores (5 - 2) + (6 - 2 - 2) + (5 - 2) = 8.
+- Choosing node 2 scores 6.
+- The best choice is nodes 1 and 3, so the answer is <respuesta>1 3</respuesta>.
+
+Answer format:
+- End your reply with exactly one answer block that lists the chosen node numbers, separated by spaces.
+- Use only node numbers from 1 to 3, each at most once. Do not write anything else inside the block.
+- If the best choice is no nodes, write <respuesta></respuesta>.
 ```
 
 ## Características
@@ -303,6 +323,8 @@ Cada celda muestra la recompensa y, entre paréntesis, el puntaje frente al ópt
 Cada nivel tiene solo 3 episodios, así que estos resultados orientan pero no miden con precisión. De los 7 inválidos, 6 se deben a agotar los tokens y no a una mala selección. Por eso conviene reportar los cortes aparte de la recompensa media.
 
 En Colab con los pesos originales, los 2 primeros episodios del nivel 2 se cortaron a los 12000 tokens. Todos estos resultados son anteriores a los presupuestos de tokens, a la referencia del mejor atajo y al filtro desde el nivel 3, así que no se comparan directamente con los actuales. La línea base vigente se obtiene con `baseline_lmstudio.ipynb`.
+
+Cada corrida se guarda en su carpeta dentro de `resultados/`, junto con su prompt y su configuración: `01_prompt_espanol` y `02_prompt_ingles` usan los mismos árboles, el mismo modelo y los mismos presupuestos, así que solo cambia el prompt.
 
 ## Limitaciones conocidas
 

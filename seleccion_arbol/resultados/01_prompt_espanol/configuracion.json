@@ -1,0 +1,17 @@
+{
+  "modelo": "Qwen 2B (qwen3.5-2b) en LM Studio",
+  "tokens_pensamiento": 3400,
+  "tokens_respuesta": 200,
+  "temperatura": 0.7,
+  "niveles": [
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "arboles_por_nivel": 20,
+  "intentos": 3,
+  "episodios": 300,
+  "test_sha256": "68f604a222ced374165e184c17b2bb9ec751ac9fa978651f1c3f29fb51bdb040"
+}

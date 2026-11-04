@@ -1,0 +1,6 @@
+modelo,nivel,intentos,pass@1,arboles_completos,pass@3
+Qwen 2B sin entrenar,2,60,0.15,20,0.25
+Qwen 2B sin entrenar,3,60,0.033,20,0.1
+Qwen 2B sin entrenar,4,60,0.0,20,0.0
+Qwen 2B sin entrenar,5,60,0.0,20,0.0
+Qwen 2B sin entrenar,6,60,0.0,20,0.0

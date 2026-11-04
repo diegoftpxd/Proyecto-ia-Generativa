@@ -34,7 +34,8 @@ def _evaluar_episodio(
 ) -> None:
     inicio = time.perf_counter()
     try:
-        respuesta = modelo.generar(generar_prompt(instancia))
+        prompt = generar_prompt(instancia)
+        respuesta = modelo.generar(prompt)
     except RuntimeError as error:
         # Es una falla de infraestructura: no se guarda, para reintentarla al reanudar.
         print(f"{nombre} nivel {nivel} ep {episodio} intento {intento}: falló la consulta: {error}")
@@ -58,6 +59,7 @@ def _evaluar_episodio(
         "segundos": round(time.perf_counter() - inicio, 1),
         "tokens": getattr(modelo, "ultimo_tokens", None),
         "fin": getattr(modelo, "ultimo_fin", None),
+        "prompt": prompt,
         "respuesta": respuesta,
         "texto_completo": getattr(modelo, "ultimo_texto", None),
         "respuesta_forzada": getattr(modelo, "ultimo_respuesta_forzada", None),

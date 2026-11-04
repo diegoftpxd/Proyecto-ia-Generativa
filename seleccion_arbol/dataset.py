@@ -27,8 +27,8 @@ def resolver(instancia: Instancia) -> tuple[set[int], str]:
 
     sin_elegir, elegido = {}, {}
     pasos = [
-        "Tomo el nodo 1 como raíz y voy de las hojas a la raíz. Para cada nodo calculo su mejor "
-        f"puntaje sin elegirlo (N) y eligiéndolo (E). Elegir un nodo y su hijo resta 2c = {costo_arista}."
+        "I take node 1 as the root and work from the leaves to the root. For each node I compute its best "
+        f"score without choosing it (N) and choosing it (E). Choosing a node and its child costs 2c = {costo_arista}."
     ]
     for nodo in reversed(orden):
         hijos = [vecino for vecino in vecinos[nodo] if vecino != padre[nodo]]
@@ -38,9 +38,9 @@ def resolver(instancia: Instancia) -> tuple[set[int], str]:
         )
         if hijos:
             detalle = ", ".join(f"{h}: N={sin_elegir[h]} E={elegido[h]}" for h in hijos)
-            pasos.append(f"Nodo {nodo} (hijos {detalle}): N={sin_elegir[nodo]}, E={elegido[nodo]}.")
+            pasos.append(f"Node {nodo} (children {detalle}): N={sin_elegir[nodo]}, E={elegido[nodo]}.")
         else:
-            pasos.append(f"Nodo {nodo} (hoja): N=0, E={elegido[nodo]}.")
+            pasos.append(f"Node {nodo} (leaf): N=0, E={elegido[nodo]}.")
 
     # Se recorre desde la raíz. En un empate se prefiere no elegir, para que el resultado sea único.
     seleccion = set()
@@ -50,8 +50,8 @@ def resolver(instancia: Instancia) -> tuple[set[int], str]:
             seleccion.add(nodo)
 
     puntaje = max(sin_elegir[1], elegido[1])
-    nodos = ", ".join(map(str, sorted(seleccion))) or "ninguno"
-    pasos.append(f"El mejor puntaje es {puntaje}. Bajando desde la raíz, los nodos elegidos son: {nodos}.")
+    nodos = ", ".join(map(str, sorted(seleccion))) or "none"
+    pasos.append(f"The best score is {puntaje}. Going down from the root, the chosen nodes are: {nodos}.")
     return seleccion, "\n".join(pasos)
 
 
