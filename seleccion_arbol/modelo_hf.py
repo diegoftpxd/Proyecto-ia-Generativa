@@ -59,14 +59,8 @@ class ModeloTransformers(ModeloLLM):
         if self._modelo is None:
             self._cargar()
 
-        opciones = {} if self.razonar is None else {"enable_thinking": self.razonar}
-        texto_prompt = self._tokenizador.apply_chat_template(
-            [{"role": "user", "content": prompt}],
-            tokenize=False,
-            add_generation_prompt=True,
-            **opciones,
-        )
-        entrada = self._tokenizador(texto_prompt, return_tensors="pt").to(self._modelo.device)
+        texto_prompt, entrada = self._preparar(prompt)
+        entrada = entrada.to(self._modelo.device)
         largo_prompt = entrada["input_ids"].shape[1]
         self.ultimo_fin = "stop"
         self.ultimo_respuesta_forzada = False
@@ -99,6 +93,22 @@ class ModeloTransformers(ModeloLLM):
         self.ultimo_tokens = salida.shape[1] - largo_prompt
         self.ultimo_texto = texto
         return extraer_respuesta(texto_prompt, texto)
+
+    def _preparar(self, prompt: str):
+        # Se tokeniza dentro de la plantilla. Tokenizar su texto aparte duplica el token de inicio (Llama)
+        # y codifica como texto los tokens de control, como [INST] en Mistral.
+        opciones = {} if self.razonar is None else {"enable_thinking": self.razonar}
+        entrada = self._tokenizador.apply_chat_template(
+            [{"role": "user", "content": prompt}],
+            tokenize=True,
+            add_generation_prompt=True,
+            return_dict=True,
+            return_tensors="pt",
+            **opciones,
+        )
+        # El texto solo se usa para saber si la plantilla abrió el razonamiento con <think>.
+        texto_prompt = self._tokenizador.decode(entrada["input_ids"][0], skip_special_tokens=False)
+        return texto_prompt, entrada
 
     def _continuar(self, entrada, tokens, **opciones):
         return self._modelo.generate(
