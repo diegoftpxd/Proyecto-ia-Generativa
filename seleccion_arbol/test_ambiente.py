@@ -11,11 +11,11 @@ from pathlib import Path
 
 from dataset import forma_canonica, generar_datasets, guardar_datasets, resolver
 from entorno import EntornoSeleccion, calcular_recompensa, evaluar_respuesta, reward
-from evaluacion import evaluar_dataset, evaluar_modelo, leer_resultados, resumir, resumir_pass
+from evaluacion import evaluar_dataset, evaluar_modelo, evaluar_varios, leer_resultados, resumir, resumir_pass
 from generador import NIVELES, Nivel, generar_instancia
 from modelo_hf import ModeloTransformers, extraer_respuesta
 from instancia import Instancia
-from modelo import ModeloLLM, ModeloLMStudio
+from modelo import DEEPSEEK, LLAMA, MINISTRAL, OLMO, ModeloLLM, ModeloLMStudio
 from prompt import generar_prompt, leer_prompt
 
 
@@ -404,7 +404,7 @@ class PruebasPresupuestoLMStudio(unittest.TestCase):
         ruta, cuerpo = recibidas[1]
         self.assertEqual(ruta, "/v1/completions")
         self.assertEqual(cuerpo["max_tokens"], 7)
-        self.assertEqual(cuerpo["stop"], ["</respuesta>"])
+        self.assertEqual(cuerpo["stop"], ["<"])
         self.assertEqual(
             cuerpo["prompt"],
             "<|im_start|>user\nP<|im_end|>\n<|im_start|>assistant\n<think>\npienso\n</think>\n\n<respuesta>",
@@ -427,6 +427,59 @@ class PruebasPresupuestoLMStudio(unittest.TestCase):
         self.assertEqual(evaluar_respuesta(CAMINO, respuesta).puntaje, 6)
         self.assertFalse(modelo.ultimo_respuesta_forzada)
         self.assertEqual(len(recibidas), 1)
+
+    def test_bloque_dentro_del_razonamiento_sin_cerrar_se_fuerza(self):
+        respuesta, modelo, _ = self.consultar([
+            chat("<think>\nquizas <respuesta>2</respuesta>", "length"),
+            completado("1 3", "stop"),
+        ])
+        self.assertEqual(respuesta, "<respuesta>1 3</respuesta>")
+        self.assertTrue(modelo.ultimo_respuesta_forzada)
+
+
+class PruebasFormatosLMStudio(unittest.TestCase):
+    def consultar(self, formato, respuestas):
+        with ServidorSimulado(respuestas) as servidor:
+            modelo = ModeloLMStudio(url_base=servidor.url, formato=formato)
+            return modelo.generar("P"), servidor.recibidas
+
+    def prompt_forzado(self, formato, contenido, razonamiento=None):
+        _, recibidas = self.consultar(formato, [chat(contenido, "length", razonamiento), completado("1", "stop")])
+        return recibidas[1][1]["prompt"]
+
+    def test_modelos_sin_canal_de_razonamiento(self):
+        self.assertEqual(
+            self.prompt_forzado(OLMO, "pienso"),
+            "<|user|>\nP\n<|assistant|>\npienso\n<respuesta>",
+        )
+        prompt = self.prompt_forzado(LLAMA, "pienso")
+        self.assertTrue(prompt.endswith(
+            "user<|end_header_id|>\n\nP<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\npienso\n<respuesta>"
+        ))
+
+    def test_deepseek_abre_el_razonamiento_en_la_plantilla(self):
+        self.assertEqual(
+            self.prompt_forzado(DEEPSEEK, "", "pienso"),
+            "<｜User｜>P<｜Assistant｜><think>\npienso\n</think>\n\n<respuesta>",
+        )
+
+    def test_ministral_repone_su_etiqueta_y_la_cierra(self):
+        for contenido, razonamiento in [("", "pienso"), ("[THINK]pienso", None)]:
+            prompt = self.prompt_forzado(MINISTRAL, contenido, razonamiento)
+            self.assertTrue(prompt.endswith("[/INST][THINK]pienso[/THINK]<respuesta>"))
+            self.assertNotIn("<think>", prompt)
+
+    def test_ministral_no_toma_el_bloque_del_razonamiento(self):
+        respuesta, recibidas = self.consultar(MINISTRAL, [
+            chat("[THINK]quizas <respuesta>2</respuesta>", "length"),
+            completado("1 3", "stop"),
+        ])
+        self.assertEqual(respuesta, "<respuesta>1 3</respuesta>")
+        self.assertEqual(len(recibidas), 2)
+
+    def test_ministral_devuelve_lo_que_sigue_al_cierre(self):
+        respuesta, _ = self.consultar(MINISTRAL, [chat("[THINK]dudo[/THINK]<respuesta>2</respuesta>", "stop")])
+        self.assertEqual(respuesta, "<respuesta>2</respuesta>")
 
 
 @unittest.skipUnless(find_spec("torch"), "Requiere torch")
@@ -516,6 +569,32 @@ class PruebasEvaluarDataset(unittest.TestCase):
             resumen = resumir(ruta)
             self.assertEqual(len(resumen), len(NIVELES))
             self.assertTrue(((resumen["episodios"] == 1) & (resumen["recompensa"] == 0.0)).all())
+
+    def test_evalua_varios_modelos_y_reintenta_las_fallas(self):
+        class ModeloRoto(ModeloLLM):
+            def generar(self, prompt):
+                raise ValueError("error inesperado")
+
+        ejemplos = generar_datasets(semilla=2, entrenamiento_por_nivel=1, evaluacion_por_nivel=1, test_por_nivel=1)["test"]
+        with tempfile.TemporaryDirectory() as carpeta:
+            guardar_datasets({"test": ejemplos}, carpeta)
+            datos = Path(carpeta) / "test.jsonl"
+            rutas = [Path(carpeta) / nombre / "r.jsonl" for nombre in "abc"]
+            evaluaciones = [
+                (ModeloFijo(falla_en=2), "a", rutas[0]),
+                (ModeloRoto(), "b", rutas[1]),
+                (ModeloFijo(), "c", rutas[2]),
+            ]
+
+            pendientes = evaluar_varios(evaluaciones, datos, rondas=2, segundos_pausa=0)
+
+            self.assertEqual(pendientes, ["b"])
+            self.assertEqual(len(leer_resultados(rutas[0])), len(ejemplos))  # La falla se recuperó en la segunda ronda
+            self.assertEqual(leer_resultados(rutas[1]), [])
+            self.assertEqual(len(leer_resultados(rutas[2])), len(ejemplos))
+            self.assertEqual(len(evaluaciones[2][0].prompts), len(ejemplos))  # Un modelo completo no se repite
+            self.assertEqual(set(resumir(rutas).index.get_level_values("modelo")), {"a", "c"})
+            self.assertEqual(set(resumir_pass(rutas, k=1).index.get_level_values("modelo")), {"a", "c"})
 
     def test_resumen_cuenta_cortes_e_invalidos(self):
         with tempfile.TemporaryDirectory() as carpeta:

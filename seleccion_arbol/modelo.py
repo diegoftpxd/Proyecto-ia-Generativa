@@ -2,9 +2,51 @@ import json
 import urllib.error
 import urllib.request
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 
-# Formato de chat de Qwen. Otro modelo en LM Studio puede necesitar uno distinto.
-PLANTILLA_QWEN = "<|im_start|>user\n{prompt}<|im_end|>\n<|im_start|>assistant\n<think>\n"
+
+@dataclass(frozen=True)
+class FormatoChat:
+    # La plantilla solo se usa en la respuesta forzada, y omite el BOS porque lo agrega el tokenizador.
+    plantilla: str
+    apertura: str | None = None  # None: el modelo no tiene un canal de razonamiento
+    cierre: str | None = None
+
+    def abre_razonamiento(self) -> bool:
+        return self.apertura is not None and self.plantilla.rstrip().endswith(self.apertura)
+
+    def texto_visible(self, texto: str, cortado: bool) -> str:
+        # Devuelve lo escrito después del razonamiento. Si quedó sin cerrar, no hay respuesta.
+        if self.cierre is None:
+            return texto
+        cierre = self.cierre.strip()
+        if cierre in texto:
+            return texto.rsplit(cierre, 1)[1].strip()
+        return "" if cortado and (self.abre_razonamiento() or self.apertura in texto) else texto
+
+
+QWEN = FormatoChat(
+    "<|im_start|>user\n{prompt}<|im_end|>\n<|im_start|>assistant\n<think>\n", "<think>", "\n</think>\n\n"
+)
+LLAMA = FormatoChat(
+    "<|start_header_id|>system<|end_header_id|>\n\nCutting Knowledge Date: December 2023\n\n<|eot_id|>"
+    "<|start_header_id|>user<|end_header_id|>\n\n{prompt}<|eot_id|>"
+    "<|start_header_id|>assistant<|end_header_id|>\n\n"
+)
+OLMO = FormatoChat("<|user|>\n{prompt}\n<|assistant|>\n")
+DEEPSEEK = FormatoChat("<｜User｜>{prompt}<｜Assistant｜><think>\n", "<think>", "\n</think>\n\n")
+MINISTRAL = FormatoChat(
+    "[SYSTEM_PROMPT]# HOW YOU SHOULD THINK AND ANSWER\n\n"
+    "First draft your thinking process (inner monologue) until you arrive at a response. "
+    "Format your response using Markdown, and use LaTeX for any mathematical equations. "
+    "Write both your thoughts and the response in the same language as the input.\n\n"
+    "Your thinking process must follow the template below:[THINK]Your thoughts or/and draft, "
+    "like working through an exercise on scratch paper. Be as casual and as long as you want "
+    "until you are confident to generate the response to the user.[/THINK]"
+    "Here, provide a self-contained response.[/SYSTEM_PROMPT][INST]{prompt}[/INST]",
+    "[THINK]",
+    "[/THINK]",
+)
 
 
 class ModeloLLM(ABC):
@@ -22,7 +64,9 @@ class ModeloLMStudio(ModeloLLM):
         tokens_pensamiento: int = 8192,
         tokens_respuesta: int = 200,
         segundos_limite: float = 600,
+        formato: FormatoChat = QWEN,
     ):
+        self.formato = formato
         self.nombre = nombre
         self.url_base = url_base.rstrip("/")
         self.temperatura = temperatura
@@ -73,20 +117,30 @@ class ModeloLMStudio(ModeloLLM):
         previo = f"{razonamiento}\n{contenido}".strip()
         self.ultimo_texto = previo
 
-        if self.ultimo_fin != "length" or "</respuesta>" in contenido:
-            return contenido
+        # Con el razonamiento en su propio campo, el contenido ya es solo lo visible.
+        cortado = self.ultimo_fin == "length"
+        visible = contenido if razonamiento else self.formato.texto_visible(contenido, cortado)
+        if not cortado or "</respuesta>" in visible:
+            return visible
         return self._forzar_respuesta(prompt, previo)
 
     def _forzar_respuesta(self, prompt: str, previo: str) -> str:
         # Se usa texto sin plantilla de chat para que el modelo continúe justo después de <respuesta>.
-        previo = previo.removeprefix("<think>").lstrip()
-        cierre = "" if "</think>" in previo else "\n</think>\n\n"
+        formato = self.formato
+        cierre = "\n"
+        if formato.apertura is not None:
+            previo = previo.removeprefix(formato.apertura).lstrip()
+            if formato.cierre.strip() not in previo:
+                cierre = formato.cierre
+            if not formato.abre_razonamiento():
+                previo = f"{formato.apertura}{previo}"
         datos = self._consultar("completions", {
             "model": self.nombre,
-            "prompt": f"{PLANTILLA_QWEN.format(prompt=prompt)}{previo}{cierre}<respuesta>",
+            "prompt": f"{formato.plantilla.format(prompt=prompt)}{previo}{cierre}<respuesta>",
             "temperature": self.temperatura,
             "max_tokens": self.tokens_respuesta,
-            "stop": ["</respuesta>"],
+            # Termina en cualquier etiqueta: algunos modelos escriben mal el cierre, como "</ respuesta>".
+            "stop": ["<"],
         })
 
         try:
