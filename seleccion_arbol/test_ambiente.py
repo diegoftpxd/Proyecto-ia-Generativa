@@ -144,7 +144,7 @@ class PruebasRecompensa(unittest.TestCase):
         self.assertEqual(evaluar_respuesta(instancia, "<respuesta>1</respuesta>").recompensa, 0.0)
 
     def test_formato_invalido(self):
-        for texto in ["", "1 3", "<respuesta>1 3", "<respuesta>uno</respuesta>", "<respuesta>1 1</respuesta>",
+        for texto in ["", "1 3 x", "<respuesta>1 3", "<respuesta>uno</respuesta>", "<respuesta>1 1</respuesta>",
                       "<respuesta>0</respuesta>", "<respuesta>4</respuesta>", "<respuesta>-1</respuesta>",
                       "<respuesta>٣</respuesta>", "<respuesta>" + "9" * 5000 + "</respuesta>"]:
             resultado = evaluar_respuesta(CAMINO, texto)
@@ -255,6 +255,10 @@ class PruebasReward(unittest.TestCase):
             "<respuesta>1; 3</respuesta>",
             "<respuesta>1 y 3</respuesta>",
             "<respuesta>3 e 1</respuesta>",
+            "<respuesta>1 and 3</respuesta>",
+            "<respuesta>3, and 1</respuesta>",
+            "<respuesta>1 AND 3</respuesta>",
+            "1 and 3",
             "<respuesta>\n1\n3\n</respuesta>",
             "<respuesta>nodos 1 y 3</respuesta>",
             "<respuesta>Nodos: 1, 3.</respuesta>",
@@ -263,8 +267,25 @@ class PruebasReward(unittest.TestCase):
             "<RESPUESTA>1 3</RESPUESTA>",
             "Razono mucho.\n</think>\n<respuesta>1 3</respuesta>",
             "<respuesta>2</respuesta> Mejor no.\n<respuesta>1 3</respuesta>",
+            # Números entre > y <, aunque la etiqueta esté mal escrita o sea otra
+            "<respuesta>1 3</ respuesta>",
+            "<respuesta>1 3<//response>\n\nStep-by-step explanation: node 2 > node 1",
+            "<answer>1 3</answer>",
+            "Pienso.\n<respuesta>\nI choose <b>1 3</b></respuesta>",
+            "<respuesta></respuesta> Mejor:\n<respuesta>1 3</respuesta>",
+            # Solo números
+            "1 3",
+            "  1, 3.\n",
         ]:
             self.assertEqual(reward(self.PROMPT, texto), 1.0, texto)
+
+    def test_texto_entre_etiquetas_no_es_una_seleccion_vacia(self):
+        for texto in ["<think>dudo</think>\n\n<x>", "<a> </a>", "<respuesta>\n</ respuesta>"]:
+            self.assertEqual(reward(self.PROMPT, texto), -1.0, texto)
+
+    def test_usa_la_ultima_lista_entre_etiquetas(self):
+        self.assertEqual(evaluar_respuesta(CAMINO, "<respuesta>1 <respuesta>3</respuesta>").puntaje, 5)
+        self.assertEqual(reward(self.PROMPT, "<respuesta>2</respuesta><respuesta>uno</respuesta>"), 0.375)
 
     def test_acepta_ninguno_en_varias_formas(self):
         for texto in ["<respuesta></respuesta>", "<respuesta>ninguno</respuesta>", "<respuesta>Ninguna.</respuesta>", "<respuesta>vacío</respuesta>"]:
@@ -280,11 +301,14 @@ class PruebasReward(unittest.TestCase):
             "<respuesta>1 3 | 2</respuesta>",
             "<respuesta>1 3 / 2</respuesta>",
             # Explotar el formato
-            "<respuesta>1 <respuesta>3</respuesta>",
             "<respuesta>1 3",
-            "1 3",
             "La respuesta es 1 3",
-            "<answer>1 3</answer>",
+            "1 3 o 2",
+            "<respuesta>1 and</respuesta>",
+            "<respuesta>and 1 3</respuesta>",
+            "<respuesta>1 andy 3</respuesta>",
+            "<respuesta>1 and and 3</respuesta>",
+            "The chosen nodes are 1 and 3",
             "<respuesta>1-3</respuesta>",
             "<respuesta>1.0 3.0</respuesta>",
             "<respuesta>0x1 0x3</respuesta>",
@@ -307,7 +331,7 @@ class PruebasReward(unittest.TestCase):
 
     def test_varios_bloques_no_dan_lo_mejor_de_cada_uno(self):
         self.assertEqual(reward(self.PROMPT, "<respuesta>1 3</respuesta><respuesta>2</respuesta>"), 0.375)
-        self.assertEqual(reward(self.PROMPT, "<respuesta>1 3</respuesta><respuesta>uno</respuesta>"), -1.0)
+        self.assertEqual(reward(self.PROMPT, "<respuesta>2</respuesta>\n<respuesta>1 3</respuesta>"), 1.0)
 
     def test_elegir_todo_y_copiar_el_ejemplo_no_premian(self):
         self.assertEqual(reward(self.PROMPT, "<respuesta>1 2 3</respuesta>"), 0.5)
@@ -334,7 +358,8 @@ class PruebasReward(unittest.TestCase):
         for texto in [
             "<respuesta>" + "1 " * 200000 + "x</respuesta>",
             "<respuesta>" * 100000,
-            "<respuesta>" * 100000 + "1</respuesta>",
+            "<respuesta>" * 100000 + "x</respuesta>",
+            ">" + "1 " * 200000 + "<",
             " " * 500000,
             "<respuesta>" + " " * 200000 + "x</respuesta>",
             "<respuesta>1" + " " * 1900 + "x</respuesta>",

@@ -12,12 +12,13 @@ RECOMPENSA_REFERENCIA = 0.5  # Igualar el mejor atajo vale esto; el resto se gan
 
 APERTURA, CIERRE = "<respuesta>", "</respuesta>"
 LARGO_MAXIMO_BLOQUE = 2000  # Sobra para cualquier nivel. Evita que un texto enorme vuelva lento al parser
-_SEPARADOR = r"(?:\s*[,;]\s*|\s+)(?:[ye]\s+)?"
+_SEPARADOR = r"(?:\s*[,;]\s*|\s+)(?:(?:[ye]|and)\s+)?"
 PATRON_NODOS = re.compile(
     rf"\s*(?:nodos?\s*:?\s*)?[\[{{(]?\s*(?:\d{{1,6}}(?:{_SEPARADOR}\d{{1,6}})*)?\s*[\]}})]?\s*\.?\s*",
     re.ASCII | re.IGNORECASE,
 )
 PATRON_NINGUNO = re.compile(r"\s*(?:ningun[oa]|vac[ií]o|none)\s*\.?\s*", re.IGNORECASE)
+PATRON_SEGMENTO = re.compile(r">([^<>]*)(?=<)")  # El texto entre un ">" y el "<" siguiente
 
 
 class ErrorFormato(ValueError):
@@ -34,28 +35,42 @@ class Resultado:
     error: str | None
 
 
-def _ultimo_bloque(respuesta: str) -> str:
-    # Se usa el último bloque porque el modelo puede razonar antes de responder.
+def _es_lista(texto: str) -> bool:
+    return re.search(r"\d", texto, re.ASCII) is not None and PATRON_NODOS.fullmatch(texto) is not None
+
+
+def _normalizar(texto: str) -> str | None:
+    # Un texto demasiado largo no es una lista de nodos, y revisarlo volvería lento al parser.
+    return " ".join(texto.split()) if len(texto) <= LARGO_MAXIMO_BLOQUE else None
+
+
+def _ultima_lista(respuesta: str) -> str:
+    # 1) Lo último escrito entre ">" y "<" que sea una lista de nodos o "ninguno". Así se aceptan
+    #    cierres mal escritos, como "</ respuesta>", y se ignora el texto que rodea las etiquetas.
     texto = respuesta.lower()
-    fin = texto.rfind(CIERRE)
-    inicio = texto.rfind(APERTURA, 0, fin) if fin != -1 else -1
-    if inicio == -1:
-        raise ErrorFormato("Falta el bloque <respuesta>...</respuesta>")
-    # Una apertura previa sin cerrar es un bloque anidado: no se sabe cuál es la respuesta.
-    if texto.rfind(APERTURA, 0, inicio) > texto.rfind(CIERRE, 0, inicio):
-        raise ErrorFormato("El bloque <respuesta> no debe estar anidado")
-    bloque = texto[inicio + len(APERTURA):fin]
-    if len(bloque) > LARGO_MAXIMO_BLOQUE:
-        raise ErrorFormato("El bloque <respuesta> es demasiado largo")
-    return " ".join(bloque.split())
+    elegido = None
+    for segmento in PATRON_SEGMENTO.finditer(texto):
+        contenido = _normalizar(segmento[1])
+        if contenido is None:
+            continue
+        # Un bloque <respuesta></respuesta> vacío es la selección vacía que pide el prompt.
+        vacio = not contenido and texto.endswith(APERTURA, 0, segmento.start() + 1) and texto.startswith(CIERRE, segmento.end())
+        if vacio or _es_lista(contenido) or PATRON_NINGUNO.fullmatch(contenido):
+            elegido = contenido
+    if elegido is not None:
+        return elegido
+
+    # 2) Una respuesta que solo tiene números de nodos, sin etiquetas.
+    completa = _normalizar(respuesta)
+    if completa is not None and _es_lista(completa):
+        return completa
+    raise ErrorFormato("No hay números de nodos entre > y <, ni una respuesta que solo tenga números")
 
 
 def parsear_respuesta(instancia: Instancia, respuesta: str) -> set[int]:
-    bloque = _ultimo_bloque(respuesta)
-    if PATRON_NINGUNO.fullmatch(bloque) is not None:
+    bloque = _ultima_lista(respuesta)
+    if not bloque or PATRON_NINGUNO.fullmatch(bloque) is not None:
         return set()
-    if PATRON_NODOS.fullmatch(bloque) is None:
-        raise ErrorFormato("El bloque <respuesta> solo debe contener números de nodos")
 
     nodos = [int(nodo) for nodo in re.findall(r"\d+", bloque, re.ASCII)]
     if len(nodos) != len(set(nodos)):
