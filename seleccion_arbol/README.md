@@ -144,19 +144,23 @@ Igualar el mejor atajo vale 0,5, y el resto solo se gana superándolo. Así, seg
 
 ### Formato de respuesta
 
-El modelo puede razonar antes de responder, porque solo se lee el último bloque `<respuesta>...</respuesta>`.
+El prompt pide `<respuesta>...</respuesta>`, pero el verificador busca los nodos así:
 
-Se aceptan formas equivalentes: cualquier orden, separadores como espacios, comas o punto y coma, `1 y 3`, `nodos 1, 3`, `{1, 3}` y `ninguno` para una selección vacía.
+1. **Entre `>` y `<`:** usa lo último escrito entre un `>` y el `<` siguiente que sea una lista de nodos o `ninguno`. Así acepta cierres mal escritos, como `<respuesta>1 3</ respuesta>`, otras etiquetas, como `<answer>1 3</answer>`, y el texto que el modelo agregue después. Un bloque `<respuesta></respuesta>` vacío es la selección vacía.
+2. **Solo números:** si no hay nada entre `>` y `<`, acepta una respuesta que solo tenga la lista, como `1 3`.
+
+El modelo puede razonar antes de responder, porque solo vale la última lista. Se aceptan formas equivalentes: cualquier orden, separadores como espacios, comas o punto y coma, `1 y 3`, `1 and 3`, `nodos 1, 3`, `{1, 3}` y `ninguno` para una selección vacía.
 
 La respuesta es inválida en estos casos:
 
-- No hay ningún bloque completo, o hay bloques anidados.
-- El bloque contiene otra cosa, como alternativas (`1 3 o 2`), rangos (`1-3`), decimales o texto.
+- No hay ninguna lista entre `>` y `<`, y la respuesta no es solo una lista.
+- La lista contiene otra cosa, como alternativas (`1 3 o 2`), rangos (`1-3`), decimales o texto.
 - Hay nodos repetidos.
 - Algún nodo está fuera del rango de 1 a `n`.
-- El bloque supera los 2000 caracteres.
+- La lista supera los 2000 caracteres.
+- La lista no se cierra con un `<`, como `<respuesta>1 3`, porque podría estar cortada.
 
-Entregar varios bloques no da lo mejor de cada uno: solo vale el último. `PruebasReward`, en `test_ambiente.py`, reúne los casos diseñados para engañar al verificador.
+Entregar varias listas no da lo mejor de cada una: solo vale la última. `PruebasReward`, en `test_ambiente.py`, reúne los casos diseñados para engañar al verificador.
 
 ### Datasets
 
