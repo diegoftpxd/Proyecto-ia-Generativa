@@ -671,6 +671,18 @@ class PruebasEvaluarDataset(unittest.TestCase):
             self.assertEqual(fila["pass@3"], 0.5)
             self.assertEqual(resumir_pass(ruta, k=3, por=["modelo"]).loc["m", "pass@3"], 0.5)
 
+    def test_pass_at_k_usa_todos_los_intentos(self):
+        with tempfile.TemporaryDirectory() as carpeta:
+            ruta = Path(carpeta) / "r.jsonl"
+            # D tiene 6 intentos y solo acierta en el quinto: no basta con mirar los 3 primeros.
+            filas = [dict(modelo="m", nivel=2, episodio="D", intento=i, recompensa=1.0 if i == 5 else 0.0) for i in range(1, 7)]
+            ruta.write_text("".join(json.dumps(f) + "\n" for f in filas), encoding="utf-8")
+            fila = resumir_pass(ruta, k=3).loc[("m", 2)]
+            self.assertAlmostEqual(fila["pass@3"], 0.5)  # 1 - C(5, 3) / C(6, 3)
+            self.assertAlmostEqual(resumir_pass(ruta, k=4).loc[("m", 2), "pass@4"], round(1 - 5 / 15, 3))
+            self.assertEqual(resumir_pass(ruta, k=6).loc[("m", 2), "pass@6"], 1.0)
+            self.assertTrue(resumir_pass(ruta, k=7).isna().loc[("m", 2), "pass@7"])
+
     def test_sin_vecinos(self):
         self.assertEqual(CAMINO.puntaje_sin_vecinos(), 6)  # Toma el 6 y sus vecinos quedan fuera
         self.assertEqual(Instancia((-1, -2), ((1, 2),), 1).puntaje_sin_vecinos(), 0)

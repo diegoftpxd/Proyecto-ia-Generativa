@@ -286,7 +286,7 @@ Esa misma clase funciona con `evaluar_modelo`.
 
 ## Cómo leer los resultados
 
-La métrica principal es pass@k. **pass@1** es la proporción de intentos que logran el óptimo, y **pass@k** la de árboles donde lo logra al menos uno de k intentos. `resumir_pass(ruta, k)` las calcula por modelo y nivel.
+La métrica principal es pass@k. **pass@1** es la proporción de intentos que logran el óptimo, y **pass@k** la probabilidad de que k intentos de un árbol incluyan al menos un óptimo. `resumir_pass(ruta, k)` las calcula por modelo y nivel. Para pass@k usa todos los intentos de cada árbol, con el estimador sin sesgo de Chen et al. (2021): con n intentos y c óptimos, `1 - C(n - c, k) / C(n, k)`. Los árboles con menos de k intentos quedan fuera.
 
 La recompensa debe compararse con 0,5, que es lo que vale igualar el mejor atajo. Por encima de 0,5 el modelo lo superó, y -1 significa que no entregó una respuesta válida.
 

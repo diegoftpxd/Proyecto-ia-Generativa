@@ -177,7 +177,11 @@ def resumir(ruta, por=("modelo", "nivel")):
 
 
 def resumir_pass(ruta, k: int = 3, por=("modelo", "nivel")):
-    # pass@1: intentos que logran el óptimo. pass@k: árboles con k intentos donde al menos uno lo logra.
+    # pass@1: intentos que logran el óptimo. pass@k: probabilidad de que k intentos de un árbol incluyan
+    # al menos un óptimo. Usa todos los intentos de cada árbol con el estimador sin sesgo de Chen et al.
+    # (2021): con n intentos y c aciertos, 1 - C(n - c, k) / C(n, k). Los árboles con menos de k quedan fuera.
+    from math import comb
+
     import pandas as pd
 
     tabla = pd.DataFrame(_leer_varios(ruta))
@@ -185,11 +189,14 @@ def resumir_pass(ruta, k: int = 3, por=("modelo", "nivel")):
         return tabla
     por = list(por)
     tabla["paso"] = tabla["recompensa"] == 1.0
-    arboles = tabla[tabla["intento"] <= k].groupby(["modelo", "nivel", "episodio"], as_index=False).agg(
+    arboles = tabla.groupby(["modelo", "nivel", "episodio"], as_index=False).agg(
         intentos=("paso", "size"),
-        paso=("paso", "max"),
+        aciertos=("paso", "sum"),
     )
-    completos = arboles[arboles["intentos"] == k].astype({"paso": float})
+    completos = arboles[arboles["intentos"] >= k].copy()
+    completos["paso"] = [
+        1 - comb(n - c, k) / comb(n, k) for n, c in zip(completos["intentos"], completos["aciertos"])
+    ]
 
     resumen = tabla.groupby(por).agg(intentos=("paso", "size"), **{"pass@1": ("paso", "mean")})
     resumen["arboles_completos"] = completos.groupby(por).size().reindex(resumen.index, fill_value=0)
