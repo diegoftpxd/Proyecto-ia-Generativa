@@ -1,0 +1,33 @@
+{
+  "modelo": "Qwen 3.5 2B",
+  "archivo": "baseline_test.jsonl",
+  "prompt": "El de prompt.py (inglés)",
+  "recompensa": "Recalculada el 2026-11-06 con el verificador de entorno.py: usa la última lista de nodos entre '>' y '<', o una respuesta que solo tenga números, y acepta 'and' como separador.",
+  "ejecuciones": [
+    {
+      "ejecucion": "LM Studio",
+      "intentos": [
+        1,
+        2,
+        3
+      ],
+      "niveles": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "episodios": 480,
+      "tokens_pensamiento": 3400,
+      "tokens_respuesta": 200,
+      "temperatura": 0.7,
+      "modelo_lm_studio": "qwen3.5-2b",
+      "cuantizacion": "Q4_K_M",
+      "notas": "Los episodios de los niveles 2 a 6 cortaron la respuesta forzada en '</respuesta>'; los de los niveles 1, 7 y 8, en el primer '<'."
+    }
+  ]
+}

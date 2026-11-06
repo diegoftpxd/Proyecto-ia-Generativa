@@ -1,0 +1,53 @@
+{
+  "modelo": "DeepSeek R1 Distill 1.5B",
+  "archivo": "baseline_test.jsonl",
+  "prompt": "El de prompt.py (inglés)",
+  "recompensa": "Recalculada el 2026-11-06 con el verificador de entorno.py: usa la última lista de nodos entre '>' y '<', o una respuesta que solo tenga números, y acepta 'and' como separador.",
+  "ejecuciones": [
+    {
+      "ejecucion": "LM Studio",
+      "intentos": [
+        1,
+        2,
+        3
+      ],
+      "niveles": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "episodios": 480,
+      "tokens_pensamiento": 3400,
+      "tokens_respuesta": 200,
+      "temperatura": 0.7,
+      "modelo_lm_studio": "deepseek-r1-distill-qwen-1.5b",
+      "cuantizacion": "Q8_0",
+      "notas": "La respuesta forzada termina en el primer '<'. En los 62 primeros episodios se aplicó después, cortando la respuesta guardada en ese mismo punto."
+    },
+    {
+      "ejecucion": "Transformers (Colab)",
+      "intentos": [
+        4,
+        5,
+        6
+      ],
+      "niveles": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "episodios": 300,
+      "tokens_pensamiento": 3400,
+      "tokens_respuesta": 200,
+      "temperatura": 0.7,
+      "notas": "Configuración y salida en 'DeepSeek R1 Distill 1.5B - Colab Setup and Results.ipynb'."
+    }
+  ]
+}

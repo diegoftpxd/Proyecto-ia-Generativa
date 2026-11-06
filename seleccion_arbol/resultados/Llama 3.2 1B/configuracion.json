@@ -1,25 +1,63 @@
 {
-  "modelo": "Llama 3.2 1B (unsloth/Llama-3.2-1B-Instruct) con Hugging Face transformers, en local",
-  "hardware": "NVIDIA GeForce RTX 3060 Laptop GPU, bf16",
-  "versiones": {
-    "transformers": "5.20.2",
-    "torch": "2.14.1+cu126"
-  },
-  "tokens_pensamiento": 3400,
-  "tokens_respuesta": 200,
-  "temperatura": 0.7,
-  "razonar": true,
-  "niveles": [
-    2,
-    3,
-    4,
-    5,
-    6
-  ],
-  "arboles_por_nivel": 20,
-  "intentos": 3,
-  "episodios": 300,
-  "prompt": "El de prompt.py (inglés), igual que 02_prompt_ingles",
-  "tokenizacion": "Prompt tokenizado dentro de apply_chat_template (sin token de inicio duplicado)",
-  "fecha": "2026-11-06"
+  "modelo": "Llama 3.2 1B",
+  "archivo": "baseline_test.jsonl",
+  "prompt": "El de prompt.py (inglés)",
+  "recompensa": "Recalculada el 2026-11-06 con el verificador de entorno.py: usa la última lista de nodos entre '>' y '<', o una respuesta que solo tenga números, y acepta 'and' como separador.",
+  "ejecuciones": [
+    {
+      "ejecucion": "LM Studio",
+      "intentos": [
+        1,
+        2,
+        3
+      ],
+      "niveles": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "episodios": 480,
+      "tokens_pensamiento": 3400,
+      "tokens_respuesta": 200,
+      "temperatura": 0.7,
+      "modelo_lm_studio": "llama-3.2-1b-instruct",
+      "cuantizacion": "Q8_0"
+    },
+    {
+      "ejecucion": "Transformers (local)",
+      "intentos": [
+        4,
+        5,
+        6
+      ],
+      "niveles": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "episodios": 300,
+      "modelo": "Llama 3.2 1B (unsloth/Llama-3.2-1B-Instruct) con Hugging Face transformers, en local",
+      "hardware": "NVIDIA GeForce RTX 3060 Laptop GPU, bf16",
+      "versiones": {
+        "transformers": "5.20.2",
+        "torch": "2.14.1+cu126"
+      },
+      "tokens_pensamiento": 3400,
+      "tokens_respuesta": 200,
+      "temperatura": 0.7,
+      "razonar": true,
+      "arboles_por_nivel": 20,
+      "prompt": "El de prompt.py (inglés), igual que 02_prompt_ingles",
+      "tokenizacion": "Prompt tokenizado dentro de apply_chat_template (sin token de inicio duplicado)",
+      "fecha": "2026-11-06",
+      "notas": "Salida en corrida.log."
+    }
+  ]
 }

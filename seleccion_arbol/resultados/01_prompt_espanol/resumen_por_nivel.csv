@@ -1,6 +1,0 @@
-modelo,nivel,episodios,recompensa,optimos,optimos_atajo,supera_voraz,supera_atajos,invalidos,cortes,segundos,tokens
-Qwen 2B sin entrenar,2,60,0.164,0.15,0.7,0.5,0.1,0.233,1.0,93.585,3405.917
-Qwen 2B sin entrenar,3,60,0.222,0.033,0.0,0.483,0.1,0.083,0.983,89.872,3361.683
-Qwen 2B sin entrenar,4,60,0.003,0.0,0.0,0.25,0.017,0.167,1.0,97.705,3407.0
-Qwen 2B sin entrenar,5,60,0.104,0.0,0.0,0.35,0.033,0.083,1.0,93.572,3409.633
-Qwen 2B sin entrenar,6,60,0.095,0.0,0.0,0.2,0.0,0.033,1.0,94.323,3408.217

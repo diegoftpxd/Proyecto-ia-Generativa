@@ -1,6 +1,0 @@
-modelo,nivel,episodios,recompensa,optimos,optimos_atajo,supera_voraz,supera_atajos,invalidos,cortes,segundos,tokens
-Qwen 2B prompt en inglés,2,60,0.392,0.2,0.7,0.4,0.05,0.05,1.0,88.08,3412.583
-Qwen 2B prompt en inglés,3,60,0.183,0.017,0.0,0.367,0.033,0.067,1.0,87.87,3419.0
-Qwen 2B prompt en inglés,4,60,0.106,0.0,0.0,0.233,0.033,0.083,1.0,87.73,3419.233
-Qwen 2B prompt en inglés,5,60,0.093,0.0,0.0,0.2,0.0,0.033,1.0,87.765,3413.083
-Qwen 2B prompt en inglés,6,60,0.051,0.0,0.0,0.117,0.0,0.05,1.0,88.41,3411.5
