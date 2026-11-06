@@ -181,7 +181,7 @@ Cualquier modelo sirve si implementa `ModeloLLM.generar(prompt)`, que recibe el 
 | `ModeloLMStudio` | `modelo.py` | En tu PC, con la API de LM Studio |
 | `ModeloTransformers` | `modelo_hf.py` | En Colab o donde haya GPU, con Hugging Face |
 
-Ambas clases usan dos presupuestos: `tokens_pensamiento` (8192 por defecto) y `tokens_respuesta` (200). Si el modelo agota el primero, se cierra su razonamiento, se escribe `<respuesta>` y debe completar los nodos con el segundo. Si esa lista también se corta, la respuesta es inválida.
+Ambas clases usan dos presupuestos: `tokens_pensamiento` (8192 por defecto) y `tokens_respuesta` (200). Si el modelo agota el primero, se cierra su razonamiento, se escribe `<respuesta>` y debe completar los nodos con el segundo. Si esa lista también se corta, la respuesta es inválida. En LM Studio, la lista termina en el primer `<`, porque algunos modelos escriben mal el cierre, como `</ respuesta>`.
 
 ### Evaluación comparable
 
@@ -306,7 +306,7 @@ Qwen3.5 2B nivel 2 ep 1: recompensa=-1.000 puntaje=None óptimo=15 697.9s 12000t
 
 El archivo JSONL guarda además `puntaje_voraz`, `puntaje_sin_vecinos`, `error`, `fin`, `respuesta`, `texto_completo` y `respuesta_forzada`. Con `pandas`, `resumir(ruta)` agrupa todo por modelo y nivel.
 
-Para el baseline en test, usa `baseline_lmstudio.ipynb` con el kernel del entorno de conda `tipico`.
+Para el baseline en test, usa `baseline_lmstudio.ipynb` con el kernel del entorno de conda `tipico`. Evalúa en orden los modelos de `MODELOS`, en todos los niveles de `datos/test.jsonl`, con `evaluar_varios`. Si un modelo falla, sigue con el siguiente y lo reintenta al final.
 
 ### Resultados hasta ahora
 
@@ -338,7 +338,7 @@ El ambiente está probado, pero hay cuatro puntos que afectan cómo leer o usar 
 - **Niveles 1 y 2:** un atajo logra el óptimo en la mayoría de sus árboles, así que acertar ahí no demuestra que el modelo optimice.
 - **Respuestas forzadas:** se califican igual que las demás, aunque el modelo no terminó de razonar. Por eso conviene mirar `cortes` junto con la recompensa.
 - **Diferencia entre LM Studio y Colab:** el modelo, la cuantización y el muestreo son distintos, así que sus resultados no son directamente comparables.
-- **Plantilla de Qwen:** la respuesta forzada en LM Studio usa el formato de chat de Qwen (`PLANTILLA_QWEN`). Otro modelo puede necesitar uno distinto.
-- **Etiquetas de razonamiento:** el cierre forzado reconoce `<think>`. Un modelo que razone con otra etiqueta recibe `<respuesta>`, pero su razonamiento no se cierra como tal.
+- **Formato de chat en LM Studio:** la respuesta forzada usa el `formato` indicado a `ModeloLMStudio`, que por defecto es `QWEN`. `modelo.py` también trae `LLAMA`, `OLMO`, `DEEPSEEK` y `MINISTRAL`. Un formato incorrecto no da error, pero altera los resultados. `LLAMA` omite la fecha actual que agrega su plantilla original.
+- **Etiquetas de razonamiento en Transformers:** el cierre forzado de `ModeloTransformers` solo reconoce `<think>`. Un modelo que razone con otra etiqueta recibe `<respuesta>`, pero su razonamiento no se cierra como tal.
 
 El ambiente tampoco incluye un ciclo de entrenamiento: entrega el prompt y la recompensa, y el algoritmo de RL queda por agregar.

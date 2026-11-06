@@ -31,7 +31,7 @@ def _episodios_hechos(ruta) -> set[tuple]:
 
 def _evaluar_episodio(
     modelo: ModeloLLM, nombre: str, instancia: Instancia, nivel: int, episodio, semilla, ruta, intento: int = 1
-) -> None:
+) -> bool:
     inicio = time.perf_counter()
     try:
         prompt = generar_prompt(instancia)
@@ -39,7 +39,7 @@ def _evaluar_episodio(
     except RuntimeError as error:
         # Es una falla de infraestructura: no se guarda, para reintentarla al reanudar.
         print(f"{nombre} nivel {nivel} ep {episodio} intento {intento}: falló la consulta: {error}")
-        return
+        return False
 
     resultado = evaluar_respuesta(instancia, respuesta)
     fila = {
@@ -71,6 +71,7 @@ def _evaluar_episodio(
         f"puntaje={resultado.puntaje} óptimo={resultado.puntaje_optimo} "
         f"{fila['segundos']}s {fila['tokens']}tok"
     )
+    return True
 
 
 def evaluar_modelo(
@@ -93,11 +94,13 @@ def evaluar_modelo(
                 _evaluar_episodio(modelo, nombre, instancia, nivel, episodio, semilla, ruta)
 
 
-def evaluar_dataset(modelo: ModeloLLM, nombre: str, ruta_datos, ruta, niveles=None, intentos: int = 1) -> None:
+def evaluar_dataset(modelo: ModeloLLM, nombre: str, ruta_datos, ruta, niveles=None, intentos: int = 1) -> int:
     # Igual que evaluar_modelo, pero con los árboles de un archivo. En orden de nivel, para ver avances parciales.
+    # Devuelve cuántos episodios fallaron y quedaron pendientes.
     ruta = Path(ruta)
     ruta.parent.mkdir(parents=True, exist_ok=True)
     hechos = _episodios_hechos(ruta)
+    fallas = 0
 
     ejemplos = sorted(leer_resultados(ruta_datos), key=lambda e: e["nivel"])
     for e in ejemplos:
@@ -106,13 +109,47 @@ def evaluar_dataset(modelo: ModeloLLM, nombre: str, ruta_datos, ruta, niveles=No
         instancia = Instancia(tuple(e["valores"]), tuple(map(tuple, e["aristas"])), e["costo"])
         for intento in range(1, intentos + 1):
             if (nombre, e["nivel"], e["id"], None, intento) not in hechos:
-                _evaluar_episodio(modelo, nombre, instancia, e["nivel"], e["id"], None, ruta, intento)
+                fallas += not _evaluar_episodio(modelo, nombre, instancia, e["nivel"], e["id"], None, ruta, intento)
+    return fallas
+
+
+def evaluar_varios(evaluaciones, ruta_datos, niveles=None, intentos: int = 1, rondas: int = 5, segundos_pausa: float = 300) -> list[str]:
+    # Evalúa cada (modelo, nombre, ruta) en orden. Las fallas se reintentan al final, tras una pausa.
+    # Devuelve los nombres de los modelos que quedaron con episodios pendientes.
+    pendientes = list(evaluaciones)
+    for ronda in range(rondas):
+        if ronda:
+            print(f"Se reintentan {len(pendientes)} modelos en {segundos_pausa} s")
+            time.sleep(segundos_pausa)
+
+        con_fallas = []
+        for evaluacion in pendientes:
+            modelo, nombre, ruta = evaluacion
+            try:
+                fallas = evaluar_dataset(modelo, nombre, ruta_datos, ruta, niveles, intentos)
+            except Exception as error:
+                # Un error inesperado en un modelo no debe impedir evaluar los demás.
+                print(f"{nombre}: se detuvo por {type(error).__name__}: {error}")
+                fallas = 1
+            if fallas:
+                con_fallas.append(evaluacion)
+
+        pendientes = con_fallas
+        if not pendientes:
+            break
+    return [nombre for _, nombre, _ in pendientes]
+
+
+def _leer_varios(rutas) -> list[dict]:
+    rutas = [rutas] if isinstance(rutas, (str, Path)) else rutas
+    return [fila for ruta in rutas for fila in leer_resultados(ruta)]
 
 
 def resumir(ruta, por=("modelo", "nivel")):
+    # `ruta` puede ser una lista de archivos, para comparar varios modelos en la misma tabla.
     import pandas as pd
 
-    tabla = pd.DataFrame(leer_resultados(ruta))
+    tabla = pd.DataFrame(_leer_varios(ruta))
     if tabla.empty:
         return tabla
     # Los resultados guardados con versiones anteriores no traen estas columnas.
@@ -143,7 +180,7 @@ def resumir_pass(ruta, k: int = 3, por=("modelo", "nivel")):
     # pass@1: intentos que logran el óptimo. pass@k: árboles con k intentos donde al menos uno lo logra.
     import pandas as pd
 
-    tabla = pd.DataFrame(leer_resultados(ruta))
+    tabla = pd.DataFrame(_leer_varios(ruta))
     if tabla.empty:
         return tabla
     por = list(por)
