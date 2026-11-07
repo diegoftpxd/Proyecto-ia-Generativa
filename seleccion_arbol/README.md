@@ -185,7 +185,7 @@ Ambas clases usan dos presupuestos: `tokens_pensamiento` (8192 por defecto) y `t
 
 ## Cómo correrlo
 
-Hay dos caminos con un modelo real: LM Studio en tu PC o el notebook en Colab. El ambiente en sí solo necesita Python.
+Hay tres caminos con un modelo real: LM Studio en tu PC, transformers en tu PC o el notebook en Colab. El ambiente en sí solo necesita Python.
 
 ### Requisitos
 
@@ -194,6 +194,7 @@ Hay dos caminos con un modelo real: LM Studio en tu PC o el notebook en Colab. E
 | Ambiente y LM Studio | Python 3.10 o superior, sin paquetes adicionales (probado con 3.12) |
 | `resumir` y todas las pruebas | `pandas` y `numpy` |
 | Regenerar el notebook | `nbformat` |
+| Transformers en tu PC | Una GPU NVIDIA, `torch` con CUDA, `transformers`, `accelerate` y `mistral-common`; `bitsandbytes` para `--4bit` |
 | Colab | Una cuenta de Google y una GPU; el notebook instala el resto |
 
 ### 1. Descargar y probar
@@ -204,7 +205,7 @@ cd Proyecto-ia-Generativa/seleccion_arbol
 python -m unittest test_ambiente
 ```
 
-Deben pasar las 44 pruebas. Se comprobó en el entorno de conda `tipico`, que tiene `pandas` y `numpy`.
+Deben pasar las 45 pruebas. Se comprobó en el entorno de conda `tipico`, que tiene `pandas` y `numpy`.
 
 ### 2. Probar el ambiente sin un modelo
 
@@ -262,7 +263,20 @@ Si cambias un archivo `.py`, regenera el notebook, porque lleva una copia de cad
 python generar_notebook.py
 ```
 
-### 5. Usar otro modelo
+### 5. Evaluar en tu PC con transformers
+
+Sirve para modelos de Hugging Face en una GPU NVIDIA, con la misma configuración que el notebook de Colab. Ejecútalo desde `seleccion_arbol`:
+
+```bash
+python benchmark_local.py mistralai/Ministral-3-3B-Reasoning-2512 --4bit
+python baseline_local.py "Ministral 3 3B Reasoning 4bit" mistralai/Ministral-3-3B-Reasoning-2512 --4bit
+```
+
+`benchmark_local.py` juega un episodio por nivel y estima cuánto tardará la línea base completa. `baseline_local.py` juega los 300 episodios y guarda los resultados en `resultados/<nombre>/`; si se corta, repite el comando y continúa donde quedó. Usa `--4bit` cuando el modelo no cabe en la GPU en bf16. Los resultados en 4 bits no son directamente comparables con los de los pesos originales.
+
+En una RTX 3060 Laptop de 6 GB, Ministral 3 3B en 4 bits genera unos 18 tokens por segundo y la línea base completa tarda unas 12 horas.
+
+### 6. Usar otro modelo
 
 Crea una clase que herede de `ModeloLLM`. Por ejemplo, así se juega un episodio:
 

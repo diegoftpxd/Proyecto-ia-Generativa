@@ -457,17 +457,24 @@ class PruebasPresupuestoTransformers(unittest.TestCase):
             def __init__(self):
                 self.llamadas = []
 
-            def generate(self, input_ids, max_new_tokens, **opciones):
+            def generate(self, input_ids, max_new_tokens, stopping_criteria=(), **opciones):
+                # Como con el tokenizador de Mistral, stop_strings no funciona con este tokenizador.
+                if "stop_strings" in opciones:
+                    raise AttributeError("El tokenizador no tiene _convert_id_to_token")
                 self.llamadas.append(max_new_tokens)
                 generado = "".join(chr(i) for i in input_ids[0].tolist())[len(prompt):]
                 if generado.endswith("<respuesta>"):
                     nuevo = respuesta
                 else:
                     nuevo = pensamiento[len(generado):]
-                ids = [ord(c) for c in nuevo[:max_new_tokens]]
-                if len(ids) < max_new_tokens:
-                    ids.append(0)
-                return torch.cat([input_ids, torch.tensor([ids], dtype=torch.long)], dim=1)
+                salida = input_ids
+                for caracter in nuevo[:max_new_tokens]:
+                    salida = torch.cat([salida, torch.tensor([[ord(caracter)]], dtype=torch.long)], dim=1)
+                    if any(criterio(salida, None).all() for criterio in stopping_criteria):
+                        return salida
+                if salida.shape[1] - input_ids.shape[1] < max_new_tokens:
+                    salida = torch.cat([salida, torch.tensor([[0]], dtype=torch.long)], dim=1)
+                return salida
 
         modelo = ModeloTransformers("x", razonar=True, tokens_pensamiento=tokens_pensamiento, tokens_respuesta=tokens_respuesta)
         modelo._modelo, modelo._tokenizador = Modelo(), Tokenizador()
@@ -486,6 +493,11 @@ class PruebasPresupuestoTransformers(unittest.TestCase):
         self.assertEqual(modelo.ultimo_fin, "length")
         self.assertEqual(modelo._modelo.llamadas, [20, 30])
         self.assertIn("</think>", modelo.ultimo_texto)
+
+    def test_respuesta_forzada_para_en_el_cierre(self):
+        texto, modelo = self.consultar("p" * 50, "1 3</respuesta> y sigue escribiendo", tokens_respuesta=30)
+        self.assertEqual(texto, "<respuesta>1 3</respuesta>")
+        self.assertTrue(modelo.ultimo_texto.endswith("<respuesta>1 3</respuesta>"))
 
     def test_fin_sin_cierre_se_completa(self):
         texto, _ = self.consultar("p" * 50, "1 3", tokens_respuesta=30)

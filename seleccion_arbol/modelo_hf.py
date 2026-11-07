@@ -18,6 +18,24 @@ def extraer_respuesta(prompt: str, texto: str) -> str:
     return texto.strip()
 
 
+class ParadaPorTexto:
+    # Criterio de parada para generate. Reemplaza stop_strings, que falla con tokenizadores sin
+    # _convert_id_to_token, como el de Mistral (MistralCommonBackend).
+    def __init__(self, tokenizador, texto: str, desde: int):
+        self.tokenizador = tokenizador
+        self.texto = texto
+        self.desde = desde
+
+    def __call__(self, input_ids, scores, **opciones):
+        import torch
+
+        terminado = [
+            self.texto in self.tokenizador.decode(fila[self.desde:], skip_special_tokens=True)
+            for fila in input_ids
+        ]
+        return torch.tensor(terminado, dtype=torch.bool, device=input_ids.device)
+
+
 class ModeloTransformers(ModeloLLM):
     # El modelo se carga en la primera consulta: si ya está evaluado, no ocupa la GPU.
     def __init__(
@@ -82,8 +100,7 @@ class ModeloTransformers(ModeloLLM):
                 salida = self._continuar(
                     {"input_ids": salida, "attention_mask": torch.ones_like(salida)},
                     self.tokens_respuesta,
-                    stop_strings=["</respuesta>"],
-                    tokenizer=self._tokenizador,
+                    stopping_criteria=[ParadaPorTexto(self._tokenizador, "</respuesta>", largo_previo)],
                 )
                 texto = self._decodificar(salida, largo_prompt)
                 # Una lista cortada por el presupuesto no se cierra: podría parecer válida sin serlo.
