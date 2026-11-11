@@ -442,8 +442,8 @@ class PruebasPresupuestoTransformers(unittest.TestCase):
                 return self
 
         class Tokenizador:
-            def apply_chat_template(self, *argumentos, **opciones):
-                return prompt
+            def apply_chat_template(self, *argumentos, tokenize=True, **opciones):
+                return self(prompt) if tokenize else prompt
 
             def __call__(self, texto, **opciones):
                 return Entrada(input_ids=torch.tensor([[ord(c) for c in texto]]))
