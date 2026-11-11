@@ -138,6 +138,40 @@ def guardar_datasets(datasets: dict[str, list[dict]], carpeta=CARPETA) -> None:
                 archivo.write(json.dumps(ejemplo, ensure_ascii=False) + "\n")
 
 
+def agregar_arboles(ruta, carpeta=CARPETA, intentos_por_nivel: int = 1000) -> list[dict]:
+    # Agrega a `ruta` un árbol nuevo por nivel, distinto de todos los de `carpeta` y de `ruta`.
+    # El id sigue al mayor que ya tiene ese nivel, y la semilla depende de él, así la secuencia es reproducible.
+    ruta = Path(ruta).resolve()
+    archivos = {archivo.resolve() for archivo in Path(carpeta).glob("*.jsonl")} | ({ruta} if ruta.exists() else set())
+    ejemplos = [json.loads(linea) for archivo in archivos for linea in archivo.read_text(encoding="utf-8").splitlines() if linea.strip()]
+    vistas = {
+        forma_canonica(Instancia(tuple(e["valores"]), tuple(map(tuple, e["aristas"])), e["costo"]))
+        for e in ejemplos
+    }
+    prefijo = ruta.stem
+    ya_hay = [e for e in ejemplos if e["id"].startswith(f"{prefijo}-")]
+
+    nuevos = []
+    for numero, nivel in enumerate(NIVELES, 1):
+        indice = max((int(e["id"].rsplit("-", 1)[1]) + 1 for e in ya_hay if e["nivel"] == numero), default=0)
+        rng = random.Random(f"{prefijo}-{numero}-{indice}")
+        for _ in range(intentos_por_nivel):
+            instancia = generar_instancia(nivel, rng)
+            forma = forma_canonica(instancia)
+            if forma not in vistas:
+                vistas.add(forma)
+                nuevos.append(crear_ejemplo(instancia, numero, f"{prefijo}-{numero}-{indice}"))
+                break
+        else:
+            print(f"Nivel {numero}: no se encontró un árbol nuevo en {intentos_por_nivel} intentos")
+
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    with ruta.open("a", encoding="utf-8", newline="\n") as archivo:
+        for ejemplo in nuevos:
+            archivo.write(json.dumps(ejemplo, ensure_ascii=False) + "\n")
+    return nuevos
+
+
 if __name__ == "__main__":
     datasets = generar_datasets()
     guardar_datasets(datasets)

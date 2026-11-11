@@ -1,4 +1,5 @@
 import json
+import os
 import random
 import tempfile
 import threading
@@ -9,7 +10,7 @@ from importlib.util import find_spec
 from itertools import combinations
 from pathlib import Path
 
-from dataset import forma_canonica, generar_datasets, guardar_datasets, resolver
+from dataset import agregar_arboles, forma_canonica, generar_datasets, guardar_datasets, resolver
 from entorno import EntornoSeleccion, calcular_recompensa, evaluar_respuesta, reward
 from evaluacion import evaluar_dataset, evaluar_modelo, evaluar_varios, leer_resultados, resumir, resumir_pass
 from generador import NIVELES, Nivel, generar_instancia
@@ -689,6 +690,23 @@ class PruebasEvaluarDataset(unittest.TestCase):
 
 
 class PruebasDataset(unittest.TestCase):
+    def test_agrega_un_arbol_nuevo_por_nivel(self):
+        datasets = generar_datasets(semilla=4, entrenamiento_por_nivel=2, evaluacion_por_nivel=1, test_por_nivel=1)
+        with tempfile.TemporaryDirectory() as carpeta:
+            guardar_datasets(datasets, carpeta)
+            ruta = Path(carpeta) / "extra.jsonl"
+            primeros = agregar_arboles(ruta, carpeta)
+            # Con otra forma de escribir la misma ruta, el archivo no se lee dos veces.
+            segundos = agregar_arboles(Path(os.path.relpath(ruta)), carpeta)
+
+            self.assertEqual([e["nivel"] for e in primeros], list(range(1, len(NIVELES) + 1)))
+            self.assertEqual(primeros[0]["id"], "extra-1-0")
+            self.assertEqual(segundos[0]["id"], "extra-1-1")
+            self.assertEqual(leer_resultados(ruta), primeros + segundos)
+            todos = [e for ejemplos in datasets.values() for e in ejemplos] + primeros + segundos
+            formas = {forma_canonica(Instancia(tuple(e["valores"]), tuple(map(tuple, e["aristas"])), e["costo"])) for e in todos}
+            self.assertEqual(len(formas), len(todos))
+
     def test_resolver_coincide_con_verificador(self):
         rng = random.Random(7)
         for _ in range(1500):
