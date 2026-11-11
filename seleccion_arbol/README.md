@@ -164,6 +164,25 @@ Entregar varios bloques no da lo mejor de cada uno: solo vale el último. `Prueb
 
 Cada ejemplo trae `prompt`, `respuesta`, `razonamiento`, el árbol y sus puntajes de referencia. La respuesta y el razonamiento se calculan por código y se comprueban con el verificador. Si un árbol tiene varias soluciones óptimas, se guarda una: para calificar, usa `reward` en vez de comparar el texto.
 
+### Datos derivados: SFT y DPO
+
+`python trazas.py resultados/03_trazas_qwen95` muestrea un modelo profesor contra `datos/entrenamiento.jsonl` y genera los datos derivados que pide el desafío:
+
+- `datos/sft.jsonl`: trazas correctas (`recompensa == 1.0`, sin corte y sin respuesta forzada), una por problema, en formato `messages`.
+- `datos/dpo.jsonl`: pares `prompt`/`chosen`/`rejected` del mismo problema. El rechazo tiene recompensa entre 0.2 y 0.9: no es una respuesta inválida, sino una solución plausible pero peor.
+- `datos/sft_solver.jsonl`: plus con las trazas que narra la programación dinámica de `dataset.py`. Son correctas por construcción, pero no reemplazan a las del modelo.
+
+El muestreo es secuencial hasta el primer éxito: por problema se generan hasta `muestras_por_problema` respuestas (6 por defecto) y se corta al obtener una correcta. Los intentos fallidos del camino se guardan y son los rechazos de DPO. Todo queda en `resultados/<carpeta>/muestras.jsonl`, así que `--solo-construir` rehace los datasets sin volver a llamar al modelo.
+
+`configuracion.json` define el modelo, la temperatura, el presupuesto, la cuota por nivel y los umbrales. Antes de una corrida larga conviene probar:
+
+```bash
+python trazas.py resultados/03_trazas_qwen95 --verificar
+python trazas.py resultados/03_trazas_qwen95 --niveles 2 --max-problemas 5
+```
+
+El resumen queda en `resultados/<carpeta>/generacion.csv`, con yield, cortes, inválidas y trazas por nivel. Si un nivel no alcanza la cuota, el archivo lo muestra: es preferible reportar el déficit a rellenar con trazas cortadas.
+
 ### Verificación del óptimo
 
 El óptimo viene de `calcular_optimo` en `verificador.py`, una programación dinámica sobre el árbol que decide en cada nodo entre elegirlo o no. Las pruebas la comparan con fuerza bruta en 1500 árboles de hasta 11 nodos.

@@ -1,0 +1,5 @@
+nivel,problemas,muestras,correctas,aceptables,yield,yield_aceptable,invalidos,cortes,trazas_sft,pares_dpo,tokens_medio,segundos_medio
+2,251,355,250,250,0.704,0.704,0.014,0.014,250,78,1259,171.0
+3,229,540,203,200,0.376,0.37,0.467,0.491,200,37,2916,68.4
+4,126,694,26,23,0.037,0.033,0.947,0.954,23,0,3492,82.4
+total,606,1589,479,473,0.301,0.298,0.575,0.587,473,115,2797,97.4

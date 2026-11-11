@@ -17,6 +17,7 @@ from modelo_hf import ModeloTransformers, extraer_respuesta
 from instancia import Instancia
 from modelo import ModeloLLM, ModeloLMStudio
 from prompt import generar_prompt, leer_prompt
+from trazas import aceptable, construir_dpo, construir_sft, resumir_generacion
 
 
 def fuerza_bruta(instancia: Instancia) -> int:
@@ -605,6 +606,95 @@ class PruebasDataset(unittest.TestCase):
                 self.assertEqual(e["prompt"], generar_prompt(instancia))
                 self.assertEqual(evaluar_respuesta(instancia, e["respuesta"]).recompensa, 1.0)
         self.assertEqual(generar_datasets(semilla=1, **tamanos), datasets)
+
+
+class PruebasTrazas(unittest.TestCase):
+    def _muestra(self, problema, nivel, muestra, recompensa, fin="stop", forzada=False):
+        return {
+            "problema": problema,
+            "nivel": nivel,
+            "muestra": muestra,
+            "modelo": "modelo de prueba",
+            "recompensa": recompensa,
+            "fin": fin,
+            "forzada": forzada,
+            "prompt": f"prompt de {problema}",
+            "respuesta": "<respuesta>1</respuesta>",
+            "texto_completo": f"razono {problema} {muestra}\n<respuesta>1</respuesta>",
+            "tokens": 10,
+            "segundos": 1.0,
+        }
+
+    def test_aceptable_exige_optimo_sin_corte(self):
+        self.assertTrue(aceptable(self._muestra("a", 2, 1, 1.0)))
+        self.assertFalse(aceptable(self._muestra("a", 2, 1, 1.0, fin="length")))
+        self.assertFalse(aceptable(self._muestra("a", 2, 1, 1.0, forzada=True)))
+        self.assertFalse(aceptable(self._muestra("a", 2, 1, 0.9)))
+
+    def test_construir_sft_una_por_problema_y_con_messages(self):
+        muestras = [
+            self._muestra("a", 2, 1, 0.0),
+            self._muestra("a", 2, 2, 1.0),
+            self._muestra("a", 2, 3, 1.0),
+            self._muestra("b", 2, 1, 1.0),
+            self._muestra("c", 2, 1, 1.0, fin="length"),
+        ]
+        sft = construir_sft(muestras, [2], 800)
+        self.assertEqual([ejemplo["problema"] for ejemplo in sft], ["a", "b"])
+        self.assertEqual(sft[0]["messages"][0], {"role": "user", "content": "prompt de a"})
+        self.assertEqual(sft[0]["messages"][1]["role"], "assistant")
+        self.assertIn("</respuesta>", sft[0]["messages"][1]["content"])
+
+    def test_construir_sft_respeta_la_cuota(self):
+        muestras = [self._muestra(f"p{i}", 2, 1, 1.0) for i in range(5)]
+        self.assertEqual(len(construir_sft(muestras, [2], 3)), 3)
+
+    def test_construir_dpo_empareja_correcta_y_rechazo_del_mismo_problema(self):
+        muestras = [
+            self._muestra("a", 2, 1, 0.438),
+            self._muestra("a", 2, 2, 1.0),
+            self._muestra("a", 2, 3, 0.75),
+            self._muestra("b", 2, 1, 1.0),
+        ]
+        pares = construir_dpo(muestras, [2], 10, 2, 0.2, 0.9)
+        self.assertEqual(len(pares), 2)
+        self.assertTrue(all(pareja["problema"] == "a" for pareja in pares))
+        self.assertEqual(pares[0]["recompensa_chosen"], 1.0)
+        self.assertIn("</respuesta>", pares[0]["chosen"])
+        self.assertIn("</respuesta>", pares[0]["rejected"])
+
+    def test_construir_dpo_descarta_invalidas_y_cortadas(self):
+        muestras = [
+            self._muestra("a", 2, 1, -1.0),
+            self._muestra("a", 2, 2, 0.5, fin="length"),
+            self._muestra("a", 2, 3, 1.0),
+            self._muestra("a", 2, 4, 0.0),
+        ]
+        self.assertEqual(construir_dpo(muestras, [2], 10, 2, 0.2, 0.9), [])
+
+    def test_resumir_generacion_cuenta_por_nivel(self):
+        muestras = [
+            self._muestra("a", 2, 1, 1.0),
+            self._muestra("a", 2, 2, 0.0),
+            self._muestra("b", 3, 1, 1.0),
+        ]
+        sft = construir_sft(muestras, [2, 3], 800)
+        dpo = construir_dpo(muestras, [2, 3], 10, 2, 0.2, 0.9)
+        resumen = resumir_generacion(muestras, sft, dpo, [2, 3])
+        self.assertEqual(len(resumen), 3)
+        fila = resumen[resumen["nivel"] == 2].iloc[0]
+        self.assertEqual(fila["muestras"], 2)
+        self.assertEqual(fila["trazas_sft"], 1)
+
+    def test_construir_sft_usa_cuotas_por_nivel(self):
+        muestras = [
+            self._muestra(f"p{nivel}-{indice}", nivel, 1, 1.0)
+            for nivel in (2, 3)
+            for indice in range(5)
+        ]
+        sft = construir_sft(muestras, [2, 3], 0, {"2": 2, "3": 1})
+        self.assertEqual(sum(1 for ejemplo in sft if ejemplo["nivel"] == 2), 2)
+        self.assertEqual(sum(1 for ejemplo in sft if ejemplo["nivel"] == 3), 1)
 
 
 if __name__ == "__main__":
