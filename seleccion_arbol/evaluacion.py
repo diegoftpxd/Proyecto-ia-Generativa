@@ -140,16 +140,18 @@ def evaluar_varios(evaluaciones, ruta_datos, niveles=None, intentos: int = 1, ro
     return [nombre for _, nombre, _ in pendientes]
 
 
-def _leer_varios(rutas) -> list[dict]:
+def _leer_varios(rutas, intentos: int | None = None) -> list[dict]:
+    # Con `intentos`, solo se usan los primeros intentos de cada árbol, para comparar modelos con distinto número.
     rutas = [rutas] if isinstance(rutas, (str, Path)) else rutas
-    return [fila for ruta in rutas for fila in leer_resultados(ruta)]
+    filas = [fila for ruta in rutas for fila in leer_resultados(ruta)]
+    return filas if intentos is None else [fila for fila in filas if fila.get("intento", 1) <= intentos]
 
 
-def resumir(ruta, por=("modelo", "nivel")):
+def resumir(ruta, por=("modelo", "nivel"), intentos: int | None = None):
     # `ruta` puede ser una lista de archivos, para comparar varios modelos en la misma tabla.
     import pandas as pd
 
-    tabla = pd.DataFrame(_leer_varios(ruta))
+    tabla = pd.DataFrame(_leer_varios(ruta, intentos))
     if tabla.empty:
         return tabla
     # Los resultados guardados con versiones anteriores no traen estas columnas.
@@ -176,7 +178,7 @@ def resumir(ruta, por=("modelo", "nivel")):
     ).round(3)
 
 
-def resumir_pass(ruta, k: int = 3, por=("modelo", "nivel")):
+def resumir_pass(ruta, k: int = 3, por=("modelo", "nivel"), intentos: int | None = None):
     # pass@1: intentos que logran el óptimo. pass@k: probabilidad de que k intentos de un árbol incluyan
     # al menos un óptimo. Usa todos los intentos de cada árbol con el estimador sin sesgo de Chen et al.
     # (2021): con n intentos y c aciertos, 1 - C(n - c, k) / C(n, k). Los árboles con menos de k quedan fuera.
@@ -184,7 +186,7 @@ def resumir_pass(ruta, k: int = 3, por=("modelo", "nivel")):
 
     import pandas as pd
 
-    tabla = pd.DataFrame(_leer_varios(ruta))
+    tabla = pd.DataFrame(_leer_varios(ruta, intentos))
     if tabla.empty:
         return tabla
     por = list(por)
