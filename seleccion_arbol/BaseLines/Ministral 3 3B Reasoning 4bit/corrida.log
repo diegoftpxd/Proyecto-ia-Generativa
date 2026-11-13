@@ -1,0 +1,487 @@
+[2026-11-06 16:59] inicio
+Ministral 3 3B Reasoning 4bit (mistralai/Ministral-3-3B-Reasoning-2512) -> \\wsl.localhost\ubuntu\home\ubox\Proyecto-ia-Generativa\seleccion_arbol\resultados\Ministral 3 3B Reasoning 4bit\baseline_test_local.jsonl
+GPU P0, 0 %, 25.40 W, 100.00 W, 7000 MHz, 48, 0 MiB
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-12 intento 1: recompensa=1.000 puntaje=10 óptimo=10 59.5s 776tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-12 intento 2: recompensa=1.000 puntaje=10 óptimo=10 155.3s 2709tok
+[17:04] GPU P0, 44 %, 76.25 W, 100.00 W, 7000 MHz, 60, 3189 MiB | episodios guardados: 2/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-12 intento 3: recompensa=1.000 puntaje=10 óptimo=10 105.9s 1902tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-15 intento 1: recompensa=0.500 puntaje=9 óptimo=10 105.2s 1898tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-15 intento 2: recompensa=1.000 puntaje=10 óptimo=10 117.4s 2113tok
+[17:09] GPU P0, 38 %, 71.30 W, 100.00 W, 7000 MHz, 57, 3189 MiB | episodios guardados: 5/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-15 intento 3: recompensa=1.000 puntaje=10 óptimo=10 106.1s 1826tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-2 intento 1: recompensa=1.000 puntaje=16 óptimo=16 148.1s 2959tok
+[17:14] GPU P0, 47 %, 76.21 W, 100.00 W, 7000 MHz, 60, 3329 MiB | episodios guardados: 7/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-2 intento 2: recompensa=-1.000 puntaje=None óptimo=16 117.6s 2077tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-2 intento 3: recompensa=-1.000 puntaje=None óptimo=16 193.5s 3410tok
+[17:19] GPU P0, 41 %, 73.63 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 9/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-17 intento 1: recompensa=1.000 puntaje=15 óptimo=15 142.0s 2671tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-17 intento 2: recompensa=-1.000 puntaje=None óptimo=15 50.9s 957tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-17 intento 3: recompensa=-1.000 puntaje=None óptimo=15 41.0s 719tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-5 intento 1: recompensa=1.000 puntaje=13 óptimo=13 125.4s 2160tok
+[17:24] GPU P0, 28 %, 50.91 W, 100.00 W, 7000 MHz, 56, 3743 MiB | episodios guardados: 13/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-5 intento 2: recompensa=-1.000 puntaje=None óptimo=13 153.2s 2640tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-5 intento 3: recompensa=1.000 puntaje=13 óptimo=13 101.6s 1813tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-9 intento 1: recompensa=0.750 puntaje=9 óptimo=10 42.5s 839tok
+[17:29] GPU P0, 41 %, 55.29 W, 100.00 W, 7000 MHz, 56, 3743 MiB | episodios guardados: 16/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-9 intento 2: recompensa=1.000 puntaje=10 óptimo=10 78.7s 1446tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-9 intento 3: recompensa=-1.000 puntaje=None óptimo=10 92.2s 1694tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-10 intento 1: recompensa=0.750 puntaje=7 óptimo=8 137.0s 2638tok
+[17:34] GPU P0, 41 %, 56.29 W, 100.00 W, 7000 MHz, 57, 3743 MiB | episodios guardados: 19/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-10 intento 2: recompensa=0.167 puntaje=2 óptimo=8 39.1s 733tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-10 intento 3: recompensa=1.000 puntaje=8 óptimo=8 92.6s 1693tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-6 intento 1: recompensa=1.000 puntaje=9 óptimo=9 70.0s 1405tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-6 intento 2: recompensa=1.000 puntaje=9 óptimo=9 79.3s 1527tok
+[17:39] GPU P0, 36 %, 54.97 W, 100.00 W, 7000 MHz, 57, 3743 MiB | episodios guardados: 23/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-6 intento 3: recompensa=1.000 puntaje=9 óptimo=9 97.3s 1752tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-8 intento 1: recompensa=1.000 puntaje=16 óptimo=16 56.4s 1024tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-8 intento 2: recompensa=1.000 puntaje=16 óptimo=16 111.6s 2030tok
+[17:44] GPU P0, 40 %, 71.47 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 26/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-8 intento 3: recompensa=1.000 puntaje=16 óptimo=16 101.5s 1818tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-19 intento 1: recompensa=-1.000 puntaje=None óptimo=18 125.1s 2256tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-19 intento 2: recompensa=1.000 puntaje=18 óptimo=18 99.5s 1793tok
+[17:49] GPU P0, 31 %, 69.74 W, 100.00 W, 7000 MHz, 58, 3743 MiB | episodios guardados: 29/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-19 intento 3: recompensa=1.000 puntaje=18 óptimo=18 113.2s 2056tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-4 intento 1: recompensa=1.000 puntaje=14 óptimo=14 54.7s 972tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-4 intento 2: recompensa=1.000 puntaje=14 óptimo=14 94.3s 1713tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-4 intento 3: recompensa=1.000 puntaje=14 óptimo=14 59.1s 1066tok
+[17:54] GPU P0, 41 %, 55.06 W, 100.00 W, 7000 MHz, 57, 3743 MiB | episodios guardados: 33/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-7 intento 1: recompensa=-1.000 puntaje=None óptimo=13 115.3s 2071tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-7 intento 2: recompensa=1.000 puntaje=13 óptimo=13 136.3s 2487tok
+[17:59] GPU P0, 45 %, 76.52 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 35/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-7 intento 3: recompensa=1.000 puntaje=13 óptimo=13 96.0s 1727tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-1 intento 1: recompensa=-1.000 puntaje=None óptimo=15 97.4s 1745tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-1 intento 2: recompensa=1.000 puntaje=15 óptimo=15 134.2s 2438tok
+[18:04] GPU P0, 35 %, 71.69 W, 100.00 W, 7000 MHz, 58, 3743 MiB | episodios guardados: 38/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-1 intento 3: recompensa=1.000 puntaje=15 óptimo=15 81.4s 1468tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-18 intento 1: recompensa=1.000 puntaje=20 óptimo=20 66.1s 1180tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-18 intento 2: recompensa=0.750 puntaje=15 óptimo=20 42.6s 760tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-18 intento 3: recompensa=0.750 puntaje=15 óptimo=20 99.7s 1784tok
+[18:09] GPU P0, 36 %, 71.22 W, 100.00 W, 7000 MHz, 58, 3743 MiB | episodios guardados: 42/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-0 intento 1: recompensa=-1.000 puntaje=None óptimo=6 111.7s 2030tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-0 intento 2: recompensa=1.000 puntaje=6 óptimo=6 123.6s 2338tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-0 intento 3: recompensa=-1.000 puntaje=None óptimo=6 104.3s 1911tok
+[18:14] GPU P0, 34 %, 52.52 W, 100.00 W, 7000 MHz, 57, 3743 MiB | episodios guardados: 45/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-16 intento 1: recompensa=1.000 puntaje=29 óptimo=29 128.1s 2297tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-16 intento 2: recompensa=-1.000 puntaje=None óptimo=29 108.3s 1951tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-16 intento 3: recompensa=-1.000 puntaje=None óptimo=29 62.4s 1108tok
+[18:19] GPU P0, 34 %, 54.21 W, 100.00 W, 7000 MHz, 56, 3743 MiB | episodios guardados: 48/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-13 intento 1: recompensa=1.000 puntaje=17 óptimo=17 84.9s 1554tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-13 intento 2: recompensa=1.000 puntaje=17 óptimo=17 123.0s 2251tok
+[18:24] GPU P0, 41 %, 78.06 W, 100.00 W, 7000 MHz, 61, 3743 MiB | episodios guardados: 50/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-13 intento 3: recompensa=1.000 puntaje=17 óptimo=17 124.4s 2256tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-3 intento 1: recompensa=-1.000 puntaje=None óptimo=17 89.1s 1595tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-3 intento 2: recompensa=1.000 puntaje=17 óptimo=17 44.3s 798tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-3 intento 3: recompensa=1.000 puntaje=17 óptimo=17 58.9s 1059tok
+[18:29] GPU P0, 42 %, 75.99 W, 100.00 W, 7000 MHz, 61, 3743 MiB | episodios guardados: 54/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-11 intento 1: recompensa=1.000 puntaje=20 óptimo=20 116.4s 2122tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-11 intento 2: recompensa=1.000 puntaje=20 óptimo=20 122.2s 2204tok
+[18:34] GPU P0, 48 %, 79.73 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 56/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-11 intento 3: recompensa=0.750 puntaje=15 óptimo=20 168.0s 3088tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-14 intento 1: recompensa=1.000 puntaje=8 óptimo=8 99.9s 1803tok
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-14 intento 2: recompensa=0.625 puntaje=5 óptimo=8 130.4s 2361tok
+[18:39] GPU P0, 32 %, 66.88 W, 100.00 W, 7000 MHz, 59, 3743 MiB | episodios guardados: 59/300
+Ministral 3 3B Reasoning 4bit nivel 2 ep test-2-14 intento 3: recompensa=0.875 puntaje=7 óptimo=8 92.6s 1667tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-12 intento 1: recompensa=1.000 puntaje=9 óptimo=9 124.4s 2255tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-12 intento 2: recompensa=1.000 puntaje=9 óptimo=9 136.0s 2468tok
+[18:44] GPU P0, 29 %, 48.13 W, 100.00 W, 7000 MHz, 59, 3743 MiB | episodios guardados: 62/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-12 intento 3: recompensa=0.500 puntaje=7 óptimo=9 75.5s 1343tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-17 intento 1: recompensa=0.500 puntaje=10 óptimo=13 188.2s 3412tok
+[18:49] GPU P0, 35 %, 60.55 W, 100.00 W, 7000 MHz, 58, 3743 MiB | episodios guardados: 64/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-17 intento 2: recompensa=-1.000 puntaje=None óptimo=13 192.0s 3506tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-17 intento 3: recompensa=1.000 puntaje=13 óptimo=13 153.4s 2796tok
+[18:54] GPU P0, 36 %, 45.14 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 66/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-10 intento 1: recompensa=0.455 puntaje=10 óptimo=14 186.6s 3414tok
+[18:59] GPU P0, 44 %, 79.13 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 67/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-10 intento 2: recompensa=1.000 puntaje=14 óptimo=14 133.2s 2425tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-10 intento 3: recompensa=1.000 puntaje=14 óptimo=14 141.6s 2570tok
+[19:04] GPU P0, 39 %, 78.44 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 69/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-15 intento 1: recompensa=0.750 puntaje=12 óptimo=13 188.0s 3412tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-15 intento 2: recompensa=1.000 puntaje=13 óptimo=13 150.9s 2748tok
+[19:09] GPU P0, 8 %, 67.25 W, 100.00 W, 7000 MHz, 61, 3743 MiB | episodios guardados: 71/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-15 intento 3: recompensa=1.000 puntaje=13 óptimo=13 129.2s 2257tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-0 intento 1: recompensa=-1.000 puntaje=None óptimo=8 183.0s 3412tok
+[19:14] GPU P0, 39 %, 76.99 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 73/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-0 intento 2: recompensa=1.000 puntaje=8 óptimo=8 132.7s 2548tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-0 intento 3: recompensa=1.000 puntaje=8 óptimo=8 140.9s 2730tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-18 intento 1: recompensa=0.400 puntaje=4 óptimo=7 28.5s 547tok
+[19:19] GPU P0, 42 %, 75.20 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 76/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-18 intento 2: recompensa=1.000 puntaje=7 óptimo=7 116.3s 2176tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-18 intento 3: recompensa=1.000 puntaje=7 óptimo=7 177.1s 3285tok
+[19:24] GPU P0, 39 %, 75.79 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 78/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-1 intento 1: recompensa=1.000 puntaje=17 óptimo=17 177.6s 3280tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-1 intento 2: recompensa=0.750 puntaje=16 óptimo=17 176.2s 3235tok
+[19:29] GPU P0, 33 %, 59.50 W, 100.00 W, 7000 MHz, 59, 3743 MiB | episodios guardados: 80/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-1 intento 3: recompensa=0.433 puntaje=13 óptimo=17 187.1s 3414tok
+[19:34] GPU P0, 49 %, 79.75 W, 100.00 W, 7000 MHz, 63, 3743 MiB | episodios guardados: 81/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-19 intento 1: recompensa=1.000 puntaje=16 óptimo=16 171.6s 3113tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-19 intento 2: recompensa=0.500 puntaje=14 óptimo=16 176.7s 3269tok
+[19:39] GPU P0, 46 %, 75.09 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 83/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-19 intento 3: recompensa=-1.000 puntaje=None óptimo=16 190.7s 3461tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-3 intento 1: recompensa=0.438 puntaje=7 óptimo=11 90.4s 1636tok
+[19:44] GPU P0, 34 %, 72.45 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 85/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-3 intento 2: recompensa=1.000 puntaje=11 óptimo=11 161.6s 2974tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-3 intento 3: recompensa=0.500 puntaje=8 óptimo=11 179.9s 3410tok
+[19:49] GPU P0, 44 %, 76.79 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 87/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-6 intento 1: recompensa=1.000 puntaje=6 óptimo=6 183.5s 3412tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-6 intento 2: recompensa=1.000 puntaje=6 óptimo=6 133.0s 2530tok
+[19:54] GPU P0, 36 %, 73.63 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 89/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-6 intento 3: recompensa=1.000 puntaje=6 óptimo=6 156.0s 2871tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-14 intento 1: recompensa=-1.000 puntaje=None óptimo=23 199.8s 3511tok
+[19:59] GPU P0, 38 %, 47.22 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 91/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-14 intento 2: recompensa=0.278 puntaje=10 óptimo=23 189.2s 3410tok
+[20:04] GPU P0, 32 %, 76.90 W, 100.00 W, 7000 MHz, 63, 3743 MiB | episodios guardados: 92/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-14 intento 3: recompensa=1.000 puntaje=23 óptimo=23 169.1s 3191tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-5 intento 1: recompensa=1.000 puntaje=9 óptimo=9 112.9s 2059tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-5 intento 2: recompensa=0.250 puntaje=4 óptimo=9 68.1s 1218tok
+[20:09] GPU P0, 34 %, 74.03 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 95/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-5 intento 3: recompensa=-1.000 puntaje=None óptimo=9 186.3s 3422tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-4 intento 1: recompensa=1.000 puntaje=16 óptimo=16 187.4s 3416tok
+[20:14] GPU P0, 29 %, 83.67 W, 100.00 W, 7000 MHz, 63, 3743 MiB | episodios guardados: 97/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-4 intento 2: recompensa=0.357 puntaje=10 óptimo=16 87.3s 1579tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-4 intento 3: recompensa=-1.000 puntaje=None óptimo=16 194.0s 3605tok
+[20:19] GPU P0, 36 %, 49.26 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 99/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-16 intento 1: recompensa=-1.000 puntaje=None óptimo=8 183.8s 3419tok
+[20:24] GPU P0, 41 %, 79.75 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 100/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-16 intento 2: recompensa=1.000 puntaje=8 óptimo=8 139.6s 2599tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-16 intento 3: recompensa=1.000 puntaje=8 óptimo=8 167.4s 3165tok
+[20:29] GPU P0, 39 %, 77.19 W, 100.00 W, 7000 MHz, 61, 3743 MiB | episodios guardados: 102/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-8 intento 1: recompensa=-1.000 puntaje=None óptimo=16 189.7s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-8 intento 2: recompensa=0.583 puntaje=11 óptimo=16 137.0s 2664tok
+[20:34] GPU P0, 48 %, 77.98 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 104/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-8 intento 3: recompensa=0.667 puntaje=12 óptimo=16 126.9s 2417tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-2 intento 1: recompensa=0.321 puntaje=9 óptimo=29 180.2s 3410tok
+[20:39] GPU P0, 41 %, 76.46 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 106/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-2 intento 2: recompensa=0.321 puntaje=9 óptimo=29 177.1s 3410tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-2 intento 3: recompensa=0.900 puntaje=26 óptimo=29 140.9s 2656tok
+[20:44] GPU P0, 33 %, 73.64 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 108/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-13 intento 1: recompensa=1.000 puntaje=12 óptimo=12 163.2s 2985tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-13 intento 2: recompensa=0.625 puntaje=9 óptimo=12 70.5s 1259tok
+[20:49] GPU P0, 44 %, 79.12 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 110/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-13 intento 3: recompensa=1.000 puntaje=12 óptimo=12 186.1s 3414tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-11 intento 1: recompensa=1.000 puntaje=21 óptimo=21 147.4s 2677tok
+[20:54] GPU P0, 38 %, 77.02 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 112/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-11 intento 2: recompensa=-1.000 puntaje=None óptimo=21 194.5s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-11 intento 3: recompensa=1.000 puntaje=21 óptimo=21 156.1s 2858tok
+[20:59] GPU P0, 42 %, 74.66 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 114/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-9 intento 1: recompensa=1.000 puntaje=18 óptimo=18 184.8s 3414tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-9 intento 2: recompensa=1.000 puntaje=18 óptimo=18 172.3s 3164tok
+[21:04] GPU P0, 29 %, 66.98 W, 100.00 W, 7000 MHz, 63, 3743 MiB | episodios guardados: 116/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-9 intento 3: recompensa=-1.000 puntaje=None óptimo=18 197.6s 3605tok
+[21:09] GPU P0, 48 %, 76.53 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 117/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-7 intento 1: recompensa=-1.000 puntaje=None óptimo=23 186.7s 3416tok
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-7 intento 2: recompensa=-1.000 puntaje=None óptimo=23 81.7s 1473tok
+[21:14] GPU P0, 51 %, 81.76 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 119/300
+Ministral 3 3B Reasoning 4bit nivel 3 ep test-3-7 intento 3: recompensa=1.000 puntaje=23 óptimo=23 175.2s 3216tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-11 intento 1: recompensa=0.472 puntaje=17 óptimo=21 189.1s 3414tok
+[21:19] GPU P0, 37 %, 64.80 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 121/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-11 intento 2: recompensa=0.278 puntaje=10 óptimo=21 137.4s 2496tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-11 intento 3: recompensa=-1.000 puntaje=None óptimo=21 197.0s 3605tok
+[21:24] GPU P0, 28 %, 66.35 W, 100.00 W, 7000 MHz, 59, 3743 MiB | episodios guardados: 123/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-1 intento 1: recompensa=0.500 puntaje=11 óptimo=14 176.0s 3199tok
+[21:29] GPU P0, 50 %, 80.60 W, 100.00 W, 7000 MHz, 63, 3743 MiB | episodios guardados: 124/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-1 intento 2: recompensa=1.000 puntaje=14 óptimo=14 177.5s 3253tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-1 intento 3: recompensa=-1.000 puntaje=None óptimo=14 196.1s 3605tok
+[21:34] GPU P0, 35 %, 73.53 W, 100.00 W, 7000 MHz, 61, 3743 MiB | episodios guardados: 126/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-8 intento 1: recompensa=1.000 puntaje=26 óptimo=26 176.9s 3231tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-8 intento 2: recompensa=1.000 puntaje=26 óptimo=26 186.8s 3414tok
+[21:39] GPU P0, 33 %, 52.67 W, 100.00 W, 7000 MHz, 59, 3743 MiB | episodios guardados: 128/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-8 intento 3: recompensa=1.000 puntaje=26 óptimo=26 166.3s 3040tok
+[21:44] GPU P0, 45 %, 79.60 W, 100.00 W, 7000 MHz, 64, 3743 MiB | episodios guardados: 129/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-17 intento 1: recompensa=0.500 puntaje=16 óptimo=22 163.9s 3012tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-17 intento 2: recompensa=-1.000 puntaje=None óptimo=22 187.5s 3412tok
+[21:49] GPU P0, 37 %, 75.66 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 131/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-17 intento 3: recompensa=0.500 puntaje=16 óptimo=22 117.2s 2118tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-15 intento 1: recompensa=0.750 puntaje=30 óptimo=32 187.4s 3420tok
+[21:54] GPU P0, 38 %, 75.86 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 133/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-15 intento 2: recompensa=0.036 puntaje=2 óptimo=32 186.9s 3410tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-15 intento 3: recompensa=0.393 puntaje=22 óptimo=32 187.5s 3414tok
+[21:59] GPU P0, 35 %, 56.89 W, 100.00 W, 7000 MHz, 59, 3743 MiB | episodios guardados: 135/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-2 intento 1: recompensa=-1.000 puntaje=None óptimo=23 168.0s 3084tok
+[22:04] GPU P0, 44 %, 79.49 W, 100.00 W, 7000 MHz, 63, 3743 MiB | episodios guardados: 136/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-2 intento 2: recompensa=-1.000 puntaje=None óptimo=23 196.9s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-2 intento 3: recompensa=-1.000 puntaje=None óptimo=23 196.6s 3605tok
+[22:09] GPU P0, 34 %, 73.69 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 138/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-0 intento 1: recompensa=0.500 puntaje=18 óptimo=20 184.6s 3412tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-0 intento 2: recompensa=0.444 puntaje=16 óptimo=20 156.0s 2871tok
+[22:14] GPU P0, 30 %, 55.93 W, 100.00 W, 7000 MHz, 59, 3743 MiB | episodios guardados: 140/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-0 intento 3: recompensa=0.278 puntaje=10 óptimo=20 188.3s 3412tok
+[22:19] GPU P0, 47 %, 79.00 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 141/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-10 intento 1: recompensa=1.000 puntaje=20 óptimo=20 186.7s 3414tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-10 intento 2: recompensa=-1.000 puntaje=None óptimo=20 197.3s 3605tok
+[22:24] GPU P0, 37 %, 60.65 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 143/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-10 intento 3: recompensa=-1.000 puntaje=None óptimo=20 198.3s 3605tok
+[22:29] GPU P0, 55 %, 79.47 W, 100.00 W, 7000 MHz, 63, 3743 MiB | episodios guardados: 144/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-5 intento 1: recompensa=0.667 puntaje=21 óptimo=27 188.1s 3418tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-5 intento 2: recompensa=-1.000 puntaje=None óptimo=27 191.8s 3487tok
+[22:34] GPU P0, 40 %, 75.93 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 146/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-5 intento 3: recompensa=0.889 puntaje=25 óptimo=27 187.7s 3414tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-19 intento 1: recompensa=1.000 puntaje=17 óptimo=17 177.7s 3251tok
+[22:39] GPU P0, 38 %, 51.39 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 148/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-19 intento 2: recompensa=0.423 puntaje=11 óptimo=17 185.6s 3414tok
+[22:44] GPU P0, 46 %, 76.98 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 149/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-19 intento 3: recompensa=1.000 puntaje=17 óptimo=17 187.1s 3414tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-14 intento 1: recompensa=0.477 puntaje=21 óptimo=26 140.3s 2537tok
+[22:49] GPU P0, 42 %, 75.67 W, 100.00 W, 7000 MHz, 61, 3743 MiB | episodios guardados: 151/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-14 intento 2: recompensa=0.477 puntaje=21 óptimo=26 188.3s 3416tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-14 intento 3: recompensa=0.205 puntaje=9 óptimo=26 188.1s 3420tok
+[22:54] GPU P0, 30 %, 53.11 W, 100.00 W, 7000 MHz, 59, 3743 MiB | episodios guardados: 153/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-3 intento 1: recompensa=-1.000 puntaje=None óptimo=18 200.1s 3605tok
+tee: 'resultados/Ministral 3 3B Reasoning 4bit/corrida.log': Invalid argument
+[22:59] GPU P0, 45 %, 77.65 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 154/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-3 intento 2: recompensa=0.500 puntaje=16 óptimo=18 180.6s 3301tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-3 intento 3: recompensa=0.375 puntaje=12 óptimo=18 184.2s 3422tok
+[23:04] GPU P0, 36 %, 36.53 W, 100.00 W, 7000 MHz, 56, 3743 MiB | episodios guardados: 156/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-4 intento 1: recompensa=0.952 puntaje=33 óptimo=35 186.1s 3416tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-4 intento 2: recompensa=0.952 puntaje=33 óptimo=35 149.4s 2876tok
+[23:09] GPU P0, 22 %, 55.84 W, 100.00 W, 7000 MHz, 59, 3743 MiB | episodios guardados: 158/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-4 intento 3: recompensa=-1.000 puntaje=None óptimo=35 188.6s 3605tok
+[23:14] GPU P0, 45 %, 78.21 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 159/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-9 intento 1: recompensa=1.000 puntaje=23 óptimo=23 167.4s 3203tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-9 intento 2: recompensa=0.417 puntaje=15 óptimo=23 178.5s 3412tok
+[23:19] GPU P0, 40 %, 74.71 W, 100.00 W, 7000 MHz, 61, 3743 MiB | episodios guardados: 161/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-9 intento 3: recompensa=1.000 puntaje=23 óptimo=23 170.7s 3317tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-18 intento 1: recompensa=0.800 puntaje=16 óptimo=18 162.9s 3161tok
+[23:24] GPU P0, 41 %, 76.42 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 163/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-18 intento 2: recompensa=0.600 puntaje=14 óptimo=18 174.0s 3290tok
+[23:29] GPU P0, 57 %, 82.50 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 164/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-18 intento 3: recompensa=1.000 puntaje=18 óptimo=18 190.8s 3416tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-13 intento 1: recompensa=0.000 puntaje=-4 óptimo=22 185.9s 3410tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-13 intento 2: recompensa=0.389 puntaje=14 óptimo=22 77.2s 1398tok
+[23:34] GPU P0, 37 %, 52.44 W, 100.00 W, 7000 MHz, 57, 3743 MiB | episodios guardados: 167/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-13 intento 3: recompensa=0.625 puntaje=19 óptimo=22 172.7s 3168tok
+[23:39] GPU P0, 54 %, 79.09 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 168/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-12 intento 1: recompensa=1.000 puntaje=26 óptimo=26 186.9s 3416tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-12 intento 2: recompensa=-1.000 puntaje=None óptimo=26 197.8s 3605tok
+[23:44] GPU P0, 33 %, 71.54 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 170/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-12 intento 3: recompensa=-1.000 puntaje=None óptimo=26 197.0s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-7 intento 1: recompensa=0.500 puntaje=9 óptimo=10 150.4s 2758tok
+[23:49] GPU P0, 42 %, 49.40 W, 100.00 W, 7000 MHz, 58, 3743 MiB | episodios guardados: 172/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-7 intento 2: recompensa=0.500 puntaje=9 óptimo=10 178.2s 3284tok
+[23:54] GPU P0, 38 %, 76.93 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 173/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-7 intento 3: recompensa=0.500 puntaje=9 óptimo=10 155.7s 2828tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-16 intento 1: recompensa=0.500 puntaje=16 óptimo=18 181.4s 3364tok
+[23:59] GPU P0, 35 %, 74.14 W, 100.00 W, 7000 MHz, 61, 3743 MiB | episodios guardados: 175/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-16 intento 2: recompensa=1.000 puntaje=18 óptimo=18 176.7s 3227tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-16 intento 3: recompensa=0.000 puntaje=0 óptimo=18 186.7s 3410tok
+[00:04] GPU P0, 29 %, 70.84 W, 100.00 W, 7000 MHz, 60, 3743 MiB | episodios guardados: 177/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-6 intento 1: recompensa=-1.000 puntaje=None óptimo=26 195.9s 3605tok
+[00:09] GPU P0, 45 %, 79.67 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 178/300
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-6 intento 2: recompensa=1.000 puntaje=26 óptimo=26 170.3s 3122tok
+Ministral 3 3B Reasoning 4bit nivel 4 ep test-4-6 intento 3: recompensa=-1.000 puntaje=None óptimo=26 113.9s 2043tok
+[00:14] GPU P0, 58 %, 80.01 W, 100.00 W, 7000 MHz, 62, 3743 MiB | episodios guardados: 180/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-2 intento 1: recompensa=0.500 puntaje=35 óptimo=40 186.6s 3416tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-2 intento 2: recompensa=-1.000 puntaje=None óptimo=40 125.8s 2298tok
+[00:19] GPU P0, 50 %, 78.48 W, 100.00 W, 7000 MHz, 62, 3959 MiB | episodios guardados: 182/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-2 intento 3: recompensa=0.414 puntaje=29 óptimo=40 185.7s 3417tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-9 intento 1: recompensa=-1.000 puntaje=None óptimo=31 196.2s 3605tok
+[00:24] GPU P0, 34 %, 73.88 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 184/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-9 intento 2: recompensa=0.241 puntaje=13 óptimo=31 185.2s 3413tok
+[00:29] GPU P0, 100 %, 99.73 W, 100.00 W, 7000 MHz, 63, 3959 MiB | episodios guardados: 185/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-9 intento 3: recompensa=0.259 puntaje=14 óptimo=31 185.6s 3410tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-4 intento 1: recompensa=0.339 puntaje=19 óptimo=32 189.0s 3419tok
+[00:34] GPU P0, 42 %, 77.19 W, 100.00 W, 7000 MHz, 61, 3959 MiB | episodios guardados: 187/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-4 intento 2: recompensa=0.357 puntaje=20 óptimo=32 186.5s 3414tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-4 intento 3: recompensa=0.143 puntaje=8 óptimo=32 185.8s 3415tok
+[00:39] GPU P0, 27 %, 64.07 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 189/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-3 intento 1: recompensa=0.000 puntaje=-8 óptimo=43 185.7s 3411tok
+[00:44] GPU P0, 52 %, 77.82 W, 100.00 W, 7000 MHz, 62, 3959 MiB | episodios guardados: 190/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-3 intento 2: recompensa=0.000 puntaje=0 óptimo=43 185.6s 3400tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-3 intento 3: recompensa=-1.000 puntaje=None óptimo=43 187.0s 3412tok
+[00:49] GPU P0, 39 %, 75.50 W, 100.00 W, 7000 MHz, 60, 3959 MiB | episodios guardados: 192/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-6 intento 1: recompensa=0.500 puntaje=23 óptimo=35 181.8s 3336tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-6 intento 2: recompensa=0.435 puntaje=20 óptimo=35 186.7s 3414tok
+[00:54] GPU P0, 28 %, 48.87 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 194/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-6 intento 3: recompensa=1.000 puntaje=35 óptimo=35 186.8s 3416tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-14 intento 1: recompensa=0.306 puntaje=22 óptimo=42 33.7s 607tok
+[00:59] GPU P0, 40 %, 72.75 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 196/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-14 intento 2: recompensa=0.208 puntaje=15 óptimo=42 186.9s 3412tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-14 intento 3: recompensa=1.000 puntaje=42 óptimo=42 140.9s 2569tok
+[01:04] GPU P0, 33 %, 73.05 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 198/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-10 intento 1: recompensa=0.433 puntaje=26 óptimo=39 186.2s 3419tok
+[01:09] GPU P0, 49 %, 84.87 W, 100.00 W, 7000 MHz, 62, 3959 MiB | episodios guardados: 199/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-10 intento 2: recompensa=0.500 puntaje=30 óptimo=39 187.3s 3416tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-10 intento 3: recompensa=-1.000 puntaje=None óptimo=39 195.5s 3605tok
+[01:14] GPU P0, 34 %, 73.04 W, 100.00 W, 7000 MHz, 60, 3959 MiB | episodios guardados: 201/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-8 intento 1: recompensa=0.486 puntaje=36 óptimo=42 186.9s 3421tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-8 intento 2: recompensa=-1.000 puntaje=None óptimo=42 196.6s 3605tok
+[01:19] GPU P0, 34 %, 48.05 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 203/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-8 intento 3: recompensa=0.500 puntaje=37 óptimo=42 188.4s 3419tok
+[01:24] GPU P0, 43 %, 77.62 W, 100.00 W, 7000 MHz, 61, 3959 MiB | episodios guardados: 204/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-15 intento 1: recompensa=-1.000 puntaje=None óptimo=39 195.7s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-15 intento 2: recompensa=0.611 puntaje=32 óptimo=39 185.4s 3416tok
+[01:29] GPU P0, 34 %, 69.95 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 206/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-15 intento 3: recompensa=0.722 puntaje=34 óptimo=39 188.4s 3421tok
+[01:34] GPU P0, 51 %, 79.19 W, 100.00 W, 7000 MHz, 61, 3959 MiB | episodios guardados: 207/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-16 intento 1: recompensa=1.000 puntaje=44 óptimo=44 187.9s 3418tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-16 intento 2: recompensa=0.625 puntaje=32 óptimo=44 187.0s 3414tok
+[01:39] GPU P0, 40 %, 73.38 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 209/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-16 intento 3: recompensa=0.656 puntaje=33 óptimo=44 187.4s 3416tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-13 intento 1: recompensa=0.283 puntaje=17 óptimo=36 189.6s 3414tok
+[01:44] GPU P0, 25 %, 50.58 W, 100.00 W, 7000 MHz, 60, 3959 MiB | episodios guardados: 211/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-13 intento 2: recompensa=1.000 puntaje=36 óptimo=36 177.5s 3248tok
+[01:49] GPU P0, 43 %, 76.33 W, 100.00 W, 7000 MHz, 60, 3959 MiB | episodios guardados: 212/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-13 intento 3: recompensa=-1.000 puntaje=None óptimo=36 196.5s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-19 intento 1: recompensa=1.000 puntaje=55 óptimo=55 165.5s 3017tok
+[01:54] GPU P0, 38 %, 72.96 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 214/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-19 intento 2: recompensa=-1.000 puntaje=None óptimo=55 196.8s 3605tok
+[01:59] GPU P0, 52 %, 83.46 W, 100.00 W, 7000 MHz, 62, 3959 MiB | episodios guardados: 215/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-19 intento 3: recompensa=-1.000 puntaje=None óptimo=55 195.6s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-12 intento 1: recompensa=0.667 puntaje=16 óptimo=18 178.3s 3268tok
+[02:04] GPU P0, 36 %, 73.97 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 217/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-12 intento 2: recompensa=1.000 puntaje=18 óptimo=18 170.6s 3136tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-12 intento 3: recompensa=0.500 puntaje=15 óptimo=18 161.5s 2962tok
+[02:09] GPU P0, 36 %, 70.59 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 219/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-17 intento 1: recompensa=0.750 puntaje=18 óptimo=20 186.4s 3412tok
+[02:14] GPU P0, 44 %, 81.35 W, 100.00 W, 7000 MHz, 61, 3959 MiB | episodios guardados: 220/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-17 intento 2: recompensa=0.438 puntaje=14 óptimo=20 179.0s 3275tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-17 intento 3: recompensa=0.500 puntaje=16 óptimo=20 147.0s 2676tok
+[02:19] GPU P0, 37 %, 76.53 W, 100.00 W, 7000 MHz, 60, 3959 MiB | episodios guardados: 222/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-18 intento 1: recompensa=0.143 puntaje=8 óptimo=33 186.4s 3410tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-18 intento 2: recompensa=0.700 puntaje=30 óptimo=33 179.8s 3285tok
+[02:25] GPU P0, 40 %, 74.87 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 224/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-18 intento 3: recompensa=0.411 puntaje=23 óptimo=33 188.0s 3416tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-5 intento 1: recompensa=0.365 puntaje=19 óptimo=45 180.0s 3302tok
+[02:30] GPU P0, 40 %, 51.05 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 226/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-5 intento 2: recompensa=-1.000 puntaje=None óptimo=45 198.4s 3605tok
+[02:35] GPU P0, 42 %, 77.05 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 227/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-5 intento 3: recompensa=0.579 puntaje=29 óptimo=45 187.4s 3416tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-7 intento 1: recompensa=1.000 puntaje=27 óptimo=27 185.2s 3414tok
+[02:40] GPU P0, 34 %, 58.27 W, 100.00 W, 7000 MHz, 57, 3959 MiB | episodios guardados: 229/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-7 intento 2: recompensa=0.600 puntaje=23 óptimo=27 188.1s 3416tok
+[02:45] GPU P0, 46 %, 78.51 W, 100.00 W, 7000 MHz, 60, 3959 MiB | episodios guardados: 230/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-7 intento 3: recompensa=0.409 puntaje=18 óptimo=27 187.2s 3416tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-0 intento 1: recompensa=0.000 puntaje=-1 óptimo=16 184.9s 3412tok
+[02:50] GPU P0, 41 %, 74.97 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 232/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-0 intento 2: recompensa=-1.000 puntaje=None óptimo=16 190.8s 3488tok
+[02:55] GPU P0, 44 %, 83.11 W, 100.00 W, 7000 MHz, 62, 3959 MiB | episodios guardados: 233/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-0 intento 3: recompensa=-1.000 puntaje=None óptimo=16 198.6s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-1 intento 1: recompensa=0.250 puntaje=12 óptimo=34 185.3s 3411tok
+[03:00] GPU P0, 46 %, 77.74 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 235/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-1 intento 2: recompensa=0.700 puntaje=28 óptimo=34 163.8s 2983tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-1 intento 3: recompensa=0.479 puntaje=23 óptimo=34 187.5s 3418tok
+[03:05] GPU P0, 37 %, 56.63 W, 100.00 W, 7000 MHz, 56, 3959 MiB | episodios guardados: 237/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-11 intento 1: recompensa=0.403 puntaje=29 óptimo=40 185.9s 3418tok
+[03:10] GPU P0, 57 %, 81.98 W, 100.00 W, 7000 MHz, 61, 3959 MiB | episodios guardados: 238/300
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-11 intento 2: recompensa=-1.000 puntaje=None óptimo=40 196.0s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 5 ep test-5-11 intento 3: recompensa=0.486 puntaje=35 óptimo=40 186.6s 3416tok
+[03:15] GPU P0, 37 %, 72.66 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 240/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-11 intento 1: recompensa=0.043 puntaje=5 óptimo=65 185.6s 3412tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-11 intento 2: recompensa=0.000 puntaje=-13 óptimo=65 186.4s 3413tok
+[03:20] GPU P0, 30 %, 53.63 W, 100.00 W, 7000 MHz, 57, 3959 MiB | episodios guardados: 242/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-11 intento 3: recompensa=0.164 puntaje=19 óptimo=65 186.5s 3410tok
+[03:25] GPU P0, 42 %, 76.03 W, 100.00 W, 7000 MHz, 60, 3959 MiB | episodios guardados: 243/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-17 intento 1: recompensa=0.449 puntaje=62 óptimo=85 186.2s 3428tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-17 intento 2: recompensa=0.341 puntaje=47 óptimo=85 184.9s 3417tok
+[03:30] GPU P0, 38 %, 72.61 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 245/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-17 intento 3: recompensa=0.130 puntaje=18 óptimo=85 186.8s 3411tok
+[03:35] GPU P0, 57 %, 82.46 W, 100.00 W, 7000 MHz, 61, 3959 MiB | episodios guardados: 246/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-1 intento 1: recompensa=0.000 puntaje=-6 óptimo=62 187.6s 3411tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-1 intento 2: recompensa=0.429 puntaje=42 óptimo=62 100.1s 1829tok
+[03:40] GPU P0, 63 %, 83.87 W, 100.00 W, 7000 MHz, 61, 3959 MiB | episodios guardados: 248/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-1 intento 3: recompensa=-1.000 puntaje=None óptimo=62 195.1s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-6 intento 1: recompensa=0.289 puntaje=41 óptimo=80 187.5s 3421tok
+[03:45] GPU P0, 43 %, 75.67 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 250/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-6 intento 2: recompensa=0.500 puntaje=71 óptimo=80 187.4s 3422tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-6 intento 3: recompensa=-1.000 puntaje=None óptimo=80 186.1s 3412tok
+[03:50] GPU P0, 36 %, 53.24 W, 100.00 W, 7000 MHz, 56, 3959 MiB | episodios guardados: 252/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-16 intento 1: recompensa=-1.000 puntaje=None óptimo=72 196.2s 3605tok
+[03:55] GPU P0, 48 %, 79.42 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 253/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-16 intento 2: recompensa=-1.000 puntaje=None óptimo=72 187.2s 3412tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-16 intento 3: recompensa=-1.000 puntaje=None óptimo=72 195.2s 3605tok
+[04:00] GPU P0, 35 %, 72.52 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 255/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-8 intento 1: recompensa=0.000 puntaje=0 óptimo=69 62.6s 1137tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-8 intento 2: recompensa=0.221 puntaje=27 óptimo=69 186.7s 3418tok
+[04:05] GPU P0, 43 %, 72.21 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 257/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-8 intento 3: recompensa=-1.000 puntaje=None óptimo=69 196.7s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-9 intento 1: recompensa=-1.000 puntaje=None óptimo=87 196.3s 3605tok
+[04:10] GPU P0, 34 %, 47.63 W, 100.00 W, 7000 MHz, 57, 3959 MiB | episodios guardados: 259/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-9 intento 2: recompensa=0.422 puntaje=65 óptimo=87 187.0s 3420tok
+[04:15] GPU P0, 36 %, 76.86 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 260/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-9 intento 3: recompensa=-1.000 puntaje=None óptimo=87 196.3s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-4 intento 1: recompensa=0.471 puntaje=80 óptimo=97 170.8s 3146tok
+[04:20] GPU P0, 43 %, 70.86 W, 100.00 W, 7000 MHz, 57, 3959 MiB | episodios guardados: 262/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-4 intento 2: recompensa=0.400 puntaje=68 óptimo=97 188.3s 3418tok
+[04:25] GPU P0, 54 %, 82.25 W, 100.00 W, 7000 MHz, 60, 3959 MiB | episodios guardados: 263/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-4 intento 3: recompensa=-1.000 puntaje=None óptimo=97 198.1s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-5 intento 1: recompensa=-1.000 puntaje=None óptimo=79 195.9s 3605tok
+[04:30] GPU P0, 33 %, 72.12 W, 100.00 W, 7000 MHz, 57, 3959 MiB | episodios guardados: 265/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-5 intento 2: recompensa=0.239 puntaje=34 óptimo=79 188.7s 3421tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-5 intento 3: recompensa=0.218 puntaje=31 óptimo=79 186.8s 3412tok
+[04:35] GPU P0, 34 %, 78.83 W, 100.00 W, 7000 MHz, 60, 3959 MiB | episodios guardados: 267/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-7 intento 1: recompensa=-1.000 puntaje=None óptimo=71 194.6s 3605tok
+[04:40] GPU P0, 44 %, 74.10 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 268/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-7 intento 2: recompensa=0.254 puntaje=30 óptimo=71 186.8s 3433tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-7 intento 3: recompensa=-1.000 puntaje=None óptimo=71 195.1s 3605tok
+[04:45] GPU P0, 33 %, 59.22 W, 100.00 W, 7000 MHz, 56, 3959 MiB | episodios guardados: 270/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-15 intento 1: recompensa=0.173 puntaje=18 óptimo=60 186.5s 3410tok
+[04:50] GPU P0, 49 %, 78.43 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 271/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-15 intento 2: recompensa=0.038 puntaje=4 óptimo=60 187.1s 3411tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-15 intento 3: recompensa=0.000 puntaje=0 óptimo=60 185.9s 3409tok
+[04:55] GPU P0, 35 %, 67.74 W, 100.00 W, 7000 MHz, 57, 3959 MiB | episodios guardados: 273/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-19 intento 1: recompensa=0.125 puntaje=15 óptimo=74 186.4s 3411tok
+[05:00] GPU P0, 38 %, 79.62 W, 100.00 W, 7000 MHz, 60, 3959 MiB | episodios guardados: 274/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-19 intento 2: recompensa=0.383 puntaje=46 óptimo=74 188.0s 3426tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-19 intento 3: recompensa=-1.000 puntaje=None óptimo=74 196.0s 3605tok
+[05:05] GPU P0, 39 %, 73.29 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 276/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-13 intento 1: recompensa=0.042 puntaje=7 óptimo=98 186.1s 3410tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-13 intento 2: recompensa=-1.000 puntaje=None óptimo=98 198.0s 3605tok
+[05:10] GPU P0, 33 %, 50.87 W, 100.00 W, 7000 MHz, 57, 3959 MiB | episodios guardados: 278/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-13 intento 3: recompensa=0.488 puntaje=82 óptimo=98 186.8s 3426tok
+[05:15] GPU P0, 38 %, 76.92 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 279/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-3 intento 1: recompensa=-1.000 puntaje=None óptimo=63 186.3s 3412tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-3 intento 2: recompensa=0.500 puntaje=49 óptimo=63 187.4s 3419tok
+[05:20] GPU P0, 33 %, 68.79 W, 100.00 W, 7000 MHz, 56, 3959 MiB | episodios guardados: 281/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-3 intento 3: recompensa=0.000 puntaje=0 óptimo=63 184.9s 3400tok
+[05:25] GPU P0, 44 %, 79.91 W, 100.00 W, 7000 MHz, 59, 3959 MiB | episodios guardados: 282/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-0 intento 1: recompensa=0.138 puntaje=19 óptimo=89 186.1s 3410tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-0 intento 2: recompensa=0.312 puntaje=43 óptimo=89 187.8s 3417tok
+[05:30] GPU P0, 40 %, 73.14 W, 100.00 W, 7000 MHz, 57, 3959 MiB | episodios guardados: 284/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-0 intento 3: recompensa=0.449 puntaje=62 óptimo=89 186.8s 3420tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-10 intento 1: recompensa=0.321 puntaje=54 óptimo=95 185.9s 3421tok
+[05:35] GPU P0, 31 %, 48.47 W, 100.00 W, 7000 MHz, 56, 3959 MiB | episodios guardados: 286/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-10 intento 2: recompensa=0.423 puntaje=71 óptimo=95 187.5s 3421tok
+[05:40] GPU P0, 47 %, 77.24 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 287/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-10 intento 3: recompensa=0.208 puntaje=35 óptimo=95 187.1s 3430tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-14 intento 1: recompensa=-1.000 puntaje=None óptimo=84 196.7s 3605tok
+[05:45] GPU P0, 31 %, 67.32 W, 100.00 W, 7000 MHz, 56, 3959 MiB | episodios guardados: 289/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-14 intento 2: recompensa=0.028 puntaje=4 óptimo=84 186.8s 3410tok
+[05:50] GPU P0, 45 %, 79.00 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 290/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-14 intento 3: recompensa=0.000 puntaje=-7 óptimo=84 186.5s 3410tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-12 intento 1: recompensa=0.000 puntaje=-29 óptimo=76 187.4s 3444tok
+[05:55] GPU P0, 40 %, 74.21 W, 100.00 W, 7000 MHz, 57, 3959 MiB | episodios guardados: 292/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-12 intento 2: recompensa=-1.000 puntaje=None óptimo=76 187.1s 3430tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-12 intento 3: recompensa=0.164 puntaje=21 óptimo=76 185.6s 3412tok
+[06:00] GPU P0, 40 %, 48.92 W, 100.00 W, 7000 MHz, 56, 3959 MiB | episodios guardados: 294/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-18 intento 1: recompensa=0.304 puntaje=42 óptimo=78 147.4s 2713tok
+[06:05] GPU P0, 52 %, 81.21 W, 100.00 W, 7000 MHz, 58, 3959 MiB | episodios guardados: 295/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-18 intento 2: recompensa=-1.000 puntaje=None óptimo=78 195.7s 3605tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-18 intento 3: recompensa=0.500 puntaje=69 óptimo=78 169.0s 3109tok
+[06:10] GPU P0, 39 %, 72.51 W, 100.00 W, 7000 MHz, 56, 3959 MiB | episodios guardados: 297/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-2 intento 1: recompensa=-1.000 puntaje=None óptimo=77 185.5s 3411tok
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-2 intento 2: recompensa=0.000 puntaje=-19 óptimo=77 186.9s 3442tok
+[06:15] GPU P0, 27 %, 62.17 W, 100.00 W, 7000 MHz, 55, 3959 MiB | episodios guardados: 299/300
+Ministral 3 3B Reasoning 4bit nivel 6 ep test-6-2 intento 3: recompensa=-1.000 puntaje=None óptimo=77 196.1s 3605tok
+=== pass@k por nivel ===
+                                     intentos  pass@1  arboles_completos  pass@3
+modelo                        nivel                                             
+Ministral 3 3B Reasoning 4bit 2            60   0.617                 20    1.00
+                              3            60   0.483                 20    0.90
+                              4            60   0.217                 20    0.45
+                              5            60   0.117                 20    0.35
+                              6            60   0.000                 20    0.00
+=== resumen por nivel ===
+                                     episodios  recompensa  optimos  optimos_atajo  supera_voraz  supera_atajos  invalidos  cortes  segundos    tokens
+modelo                        nivel                                                                                                                   
+Ministral 3 3B Reasoning 4bit 2             60       0.482    0.617            0.7         0.750          0.200      0.233   0.017   100.472  1818.967
+                              3             60       0.442    0.483            0.0         0.683          0.583      0.200   0.383   155.243  2862.517
+                              4             60       0.223    0.217            0.0         0.650          0.350      0.250   0.567   176.682  3244.900
+                              5             60       0.182    0.117            0.0         0.600          0.283      0.217   0.750   181.307  3316.967
+                              6             60      -0.181    0.000            0.0         0.350          0.000      0.333   0.900   184.347  3378.533
+=== total ===
+                               intentos  pass@1  arboles_completos  pass@3
+modelo                                                                    
+Ministral 3 3B Reasoning 4bit       300   0.287                100    0.54
+                               episodios  recompensa  optimos  optimos_atajo  supera_voraz  supera_atajos  invalidos  cortes  segundos    tokens
+modelo                                                                                                                                          
+Ministral 3 3B Reasoning 4bit        300        0.23    0.287           0.14         0.607          0.283      0.247   0.523    159.61  2924.377
+[2026-11-07 06:17] fin

@@ -347,7 +347,7 @@ Cada nivel tiene solo 3 episodios, así que estos resultados orientan pero no mi
 
 En Colab con los pesos originales, los 2 primeros episodios del nivel 2 se cortaron a los 12000 tokens. Todos estos resultados son anteriores a los presupuestos de tokens, a la referencia del mejor atajo y al filtro desde el nivel 3, así que no se comparan directamente con los actuales. La línea base vigente se obtiene con `baseline_lmstudio.ipynb`.
 
-Cada modelo tiene su carpeta en `resultados/`, con un solo archivo `baseline_test.jsonl` y un `configuracion.json` que describe cada ejecución. La columna `modelo` solo tiene el nombre del modelo. Cuando un modelo tiene dos corridas sobre los mismos árboles, la segunda usa los intentos 4 a 6. Todas las recompensas están calculadas con el verificador actual.
+Cada modelo tiene su carpeta en `BaseLines/`, con un solo archivo `baseline_test.jsonl` y un `configuracion.json` que describe cada ejecución. La columna `modelo` solo tiene el nombre del modelo. Cuando un modelo tiene dos corridas sobre los mismos árboles, la segunda usa los intentos 4 a 6. Todas las recompensas están calculadas con el verificador actual.
 
 ## Limitaciones conocidas
 
