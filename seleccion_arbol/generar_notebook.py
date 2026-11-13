@@ -7,7 +7,7 @@ from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
 CARPETA = Path(__file__).parent
 ARCHIVOS = [
     "verificador.py", "instancia.py", "generador.py", "prompt.py", "modelo.py",
-    "modelo_hf.py", "entorno.py", "evaluacion.py", "dataset.py", "test_ambiente.py",
+    "modelo_hf.py", "entorno.py", "evaluacion.py", "dataset.py", "trazas.py", "test_ambiente.py",
 ]
 
 celdas = [
