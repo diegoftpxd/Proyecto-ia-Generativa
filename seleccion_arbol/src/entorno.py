@@ -2,10 +2,10 @@ import random
 import re
 from dataclasses import dataclass
 
-from generador import Nivel, generar_instancia
-from instancia import Instancia
-from modelo import ModeloLLM, ModeloLMStudio
-from prompt import generar_prompt, leer_prompt
+from src.generador import Nivel, generar_instancia
+from src.instancia import Instancia
+from src.modelo import ModeloLLM, ModeloLMStudio
+from src.prompt import generar_prompt, leer_prompt
 
 RECOMPENSA_FORMATO_INVALIDO = -1.0
 RECOMPENSA_REFERENCIA = 0.5  # Igualar el mejor atajo vale esto; el resto se gana al superarlo
@@ -135,6 +135,6 @@ def jugar_episodio(entorno: EntornoSeleccion, modelo: ModeloLLM, nivel: Nivel) -
 
 
 if __name__ == "__main__":
-    from generador import NIVELES
+    from src.generador import NIVELES
 
     print(jugar_episodio(EntornoSeleccion(), ModeloLMStudio(), NIVELES[0]))

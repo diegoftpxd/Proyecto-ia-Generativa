@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from verificador import calcular_optimo
+from src.verificador import calcular_optimo
 
 
 @dataclass(frozen=True)

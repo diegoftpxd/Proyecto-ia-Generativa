@@ -1,4 +1,4 @@
-# Genera colab_evaluacion.ipynb incrustando los .py de esta carpeta. Ejecutar tras cambiarlos.
+# Genera colab_evaluacion.ipynb incrustando los .py de src/. Ejecutar tras cambiarlos: python -m src.generar_notebook
 from pathlib import Path
 
 import nbformat
@@ -18,17 +18,17 @@ celdas = [
     ),
     new_code_cell("!pip install -q -U transformers accelerate mistral-common\n!nvidia-smi -L"),
     new_markdown_cell("## Código del ambiente"),
-    new_code_cell("!mkdir -p seleccion_arbol"),
+    new_code_cell("!mkdir -p seleccion_arbol/src && touch seleccion_arbol/src/__init__.py"),
 ]
 for nombre in ARCHIVOS:
     fuente = (CARPETA / nombre).read_text(encoding="utf-8")
-    celdas.append(new_code_cell(f"%%writefile seleccion_arbol/{nombre}\n{fuente}"))
+    celdas.append(new_code_cell(f"%%writefile seleccion_arbol/src/{nombre}\n{fuente}"))
 
 celdas += [
     new_code_cell(
         "import sys\n"
         "sys.path.insert(0, 'seleccion_arbol')\n"
-        "!cd seleccion_arbol && python -m unittest test_ambiente 2>&1 | tail -3"
+        "!cd seleccion_arbol && python -m unittest src.test_ambiente 2>&1 | tail -3"
     ),
     new_markdown_cell(
         "## Configuración\n\n"
@@ -56,9 +56,9 @@ celdas += [
     ),
     new_markdown_cell("## Evaluación"),
     new_code_cell(
-        "from dataset import generar_datasets, guardar_datasets\n"
-        "from evaluacion import evaluar_dataset, resumir, resumir_pass\n"
-        "from modelo_hf import ModeloTransformers\n\n"
+        "from src.dataset import generar_datasets, guardar_datasets\n"
+        "from src.evaluacion import evaluar_dataset, resumir, resumir_pass\n"
+        "from src.modelo_hf import ModeloTransformers\n\n"
         "# Se generan los mismos árboles publicados en el repositorio.\n"
         "guardar_datasets(generar_datasets(), 'datos')\n\n"
         "for nombre, opciones in MODELOS.items():\n"
@@ -88,4 +88,4 @@ celdas += [
 cuaderno = new_notebook(cells=celdas)
 cuaderno.metadata["accelerator"] = "GPU"
 cuaderno.metadata["kernelspec"] = {"name": "python3", "display_name": "Python 3"}
-nbformat.write(cuaderno, CARPETA / "colab_evaluacion.ipynb")
+nbformat.write(cuaderno, CARPETA.parent / "colab_evaluacion.ipynb")

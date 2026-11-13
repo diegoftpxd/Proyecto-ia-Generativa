@@ -1,6 +1,6 @@
 import re
 
-from instancia import Instancia
+from src.instancia import Instancia
 
 PATRON_PROMPT = re.compile(
     r"Node values \(node: value\):\n(?P<valores>(?:\d+: -?\d+\n)+)\n"

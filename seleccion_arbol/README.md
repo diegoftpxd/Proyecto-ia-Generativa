@@ -88,10 +88,10 @@ Cada episodio tiene un solo paso, con la misma forma `reset` y `step` que usan o
 
 ### Interfaz común
 
-`reward(prompt, completion) -> float`, en `entorno.py`, califica sin ningún estado guardado: reconstruye el árbol desde el prompt y lanza `ValueError` si el prompt no es de este ambiente.
+`reward(prompt, completion) -> float`, en `src/entorno.py`, califica sin ningún estado guardado: reconstruye el árbol desde el prompt y lanza `ValueError` si el prompt no es de este ambiente.
 
 ```python
-from entorno import reward
+from src.entorno import reward
 
 reward(prompt, "Razono...\n<respuesta>1 3</respuesta>")  # Devuelve un valor entre -1 y 1
 ```
@@ -160,36 +160,36 @@ La respuesta es inválida en estos casos:
 - La lista supera los 2000 caracteres.
 - La lista no se cierra con un `<`, como `<respuesta>1 3`, porque podría estar cortada.
 
-Entregar varias listas no da lo mejor de cada una: solo vale la última. `PruebasReward`, en `test_ambiente.py`, reúne los casos diseñados para engañar al verificador.
+Entregar varias listas no da lo mejor de cada una: solo vale la última. `PruebasReward`, en `src/test_ambiente.py`, reúne los casos diseñados para engañar al verificador.
 
 ### Datasets
 
-`python dataset.py` genera `datos/entrenamiento.jsonl`, `datos/evaluacion.jsonl` y `datos/test.jsonl`. Tienen 800, 20 y 20 árboles por nivel (734 en el entrenamiento del nivel 1). Ningún árbol se repite entre particiones, ni siquiera cambiando la numeración de sus nodos.
+`python -m src.dataset` genera `datos/entrenamiento.jsonl`, `datos/evaluacion.jsonl` y `datos/test.jsonl`. Tienen 800, 20 y 20 árboles por nivel (734 en el entrenamiento del nivel 1). Ningún árbol se repite entre particiones, ni siquiera cambiando la numeración de sus nodos.
 
 Cada ejemplo trae `prompt`, `respuesta`, `razonamiento`, el árbol y sus puntajes de referencia. La respuesta y el razonamiento se calculan por código y se comprueban con el verificador. Si un árbol tiene varias soluciones óptimas, se guarda una: para calificar, usa `reward` en vez de comparar el texto.
 
 ### Datos derivados: SFT y DPO
 
-`python trazas.py resultados/03_trazas_qwen95` muestrea un modelo profesor contra `datos/entrenamiento.jsonl` y genera los datos derivados que pide el desafío:
+`python -m src.trazas resultados/03_trazas_qwen95` muestrea un modelo profesor contra `datos/entrenamiento.jsonl` y genera los datos derivados que pide el desafío:
 
 - `datos/sft.jsonl`: trazas correctas (`recompensa == 1.0`, sin corte y sin respuesta forzada), una por problema, en formato `messages`.
 - `datos/dpo.jsonl`: pares `prompt`/`chosen`/`rejected` del mismo problema. El rechazo tiene recompensa entre 0.2 y 0.9: no es una respuesta inválida, sino una solución plausible pero peor.
-- `datos/sft_solver.jsonl`: plus con las trazas que narra la programación dinámica de `dataset.py`. Son correctas por construcción, pero no reemplazan a las del modelo.
+- `datos/sft_solver.jsonl`: plus con las trazas que narra la programación dinámica de `src/dataset.py`. Son correctas por construcción, pero no reemplazan a las del modelo.
 
 El muestreo es secuencial hasta el primer éxito: por problema se generan hasta `muestras_por_problema` respuestas (6 por defecto) y se corta al obtener una correcta. Los intentos fallidos del camino se guardan y son los rechazos de DPO. Todo queda en `resultados/<carpeta>/muestras.jsonl`, así que `--solo-construir` rehace los datasets sin volver a llamar al modelo.
 
 `configuracion.json` define el modelo, la temperatura, el presupuesto, la cuota por nivel y los umbrales. Antes de una corrida larga conviene probar:
 
 ```bash
-python trazas.py resultados/03_trazas_qwen95 --verificar
-python trazas.py resultados/03_trazas_qwen95 --niveles 2 --max-problemas 5
+python -m src.trazas resultados/03_trazas_qwen95 --verificar
+python -m src.trazas resultados/03_trazas_qwen95 --niveles 2 --max-problemas 5
 ```
 
 El resumen queda en `resultados/<carpeta>/generacion.csv`, con yield, cortes, inválidas y trazas por nivel. Si un nivel no alcanza la cuota, el archivo lo muestra: es preferible reportar el déficit a rellenar con trazas cortadas.
 
 ### Verificación del óptimo
 
-El óptimo viene de `calcular_optimo` en `verificador.py`, una programación dinámica sobre el árbol que decide en cada nodo entre elegirlo o no. Las pruebas la comparan con fuerza bruta en 1500 árboles de hasta 11 nodos.
+El óptimo viene de `calcular_optimo` en `src/verificador.py`, una programación dinámica sobre el árbol que decide en cada nodo entre elegirlo o no. Las pruebas la comparan con fuerza bruta en 1500 árboles de hasta 11 nodos.
 
 ### Modelos intercambiables
 
@@ -197,14 +197,14 @@ Cualquier modelo sirve si implementa `ModeloLLM.generar(prompt)`, que recibe el 
 
 | Clase | Archivo | Dónde corre |
 | --- | --- | --- |
-| `ModeloLMStudio` | `modelo.py` | En tu PC, con la API de LM Studio |
-| `ModeloTransformers` | `modelo_hf.py` | En Colab o donde haya GPU, con Hugging Face |
+| `ModeloLMStudio` | `src/modelo.py` | En tu PC, con la API de LM Studio |
+| `ModeloTransformers` | `src/modelo_hf.py` | En Colab o donde haya GPU, con Hugging Face |
 
 Ambas clases usan dos presupuestos: `tokens_pensamiento` (8192 por defecto) y `tokens_respuesta` (200). Si el modelo agota el primero, se cierra su razonamiento, se escribe `<respuesta>` y debe completar los nodos con el segundo. Si esa lista también se corta, la respuesta es inválida. En LM Studio, la lista termina en el primer `<`, porque algunos modelos escriben mal el cierre, como `</ respuesta>`.
 
 ### Evaluación comparable
 
-`evaluar_modelo` en `evaluacion.py` entrega los mismos árboles a todos los modelos, porque cada árbol depende solo de la semilla, el nivel y el episodio. Guarda cada episodio en un archivo JSONL al terminar y, si se interrumpe, retoma donde quedó.
+`evaluar_modelo` en `src/evaluacion.py` entrega los mismos árboles a todos los modelos, porque cada árbol depende solo de la semilla, el nivel y el episodio. Guarda cada episodio en un archivo JSONL al terminar y, si se interrumpe, retoma donde quedó.
 
 ## Cómo correrlo
 
@@ -224,7 +224,7 @@ Hay dos caminos con un modelo real: LM Studio en tu PC o el notebook en Colab. E
 ```bash
 git clone https://github.com/diegoftpxd/Proyecto-ia-Generativa.git
 cd Proyecto-ia-Generativa/seleccion_arbol
-python -m unittest test_ambiente
+python -m unittest src.test_ambiente
 ```
 
 Deben pasar las 44 pruebas. Se comprobó en el entorno de conda `tipico`, que tiene `pandas` y `numpy`.
@@ -234,8 +234,8 @@ Deben pasar las 44 pruebas. Se comprobó en el entorno de conda `tipico`, que ti
 Esto escribe la respuesta a mano y sirve para ver cómo funciona. Ejecútalo desde `seleccion_arbol`:
 
 ```python
-from entorno import EntornoSeleccion
-from generador import NIVELES
+from src.entorno import EntornoSeleccion
+from src.generador import NIVELES
 
 entorno = EntornoSeleccion(semilla=1)
 prompt = entorno.reset(NIVELES[1])  # NIVELES[1] es el nivel 2
@@ -252,8 +252,8 @@ print(resultado.recompensa, resultado.puntaje, resultado.puntaje_optimo)
 3. Corre esto desde `seleccion_arbol`:
 
 ```python
-from evaluacion import evaluar_modelo
-from modelo import ModeloLMStudio
+from src.evaluacion import evaluar_modelo
+from src.modelo import ModeloLMStudio
 
 modelo = ModeloLMStudio()  # Otro modelo: ModeloLMStudio(nombre="...", url_base="...")
 evaluar_modelo(modelo, "Qwen local", niveles=[2, 3, 4], episodios=3, ruta="resultados.jsonl")
@@ -282,7 +282,7 @@ Los resultados quedan en Drive, así que puedes volver a ejecutar tras un corte 
 Si cambias un archivo `.py`, regenera el notebook, porque lleva una copia de cada uno:
 
 ```bash
-python generar_notebook.py
+python -m src.generar_notebook
 ```
 
 ### 5. Usar otro modelo
@@ -290,9 +290,9 @@ python generar_notebook.py
 Crea una clase que herede de `ModeloLLM`. Por ejemplo, así se juega un episodio:
 
 ```python
-from entorno import EntornoSeleccion, jugar_episodio
-from generador import NIVELES
-from modelo import ModeloLLM
+from src.entorno import EntornoSeleccion, jugar_episodio
+from src.generador import NIVELES
+from src.modelo import ModeloLLM
 
 class MiModelo(ModeloLLM):
     def generar(self, prompt: str) -> str:
@@ -357,7 +357,7 @@ El ambiente está probado, pero hay cuatro puntos que afectan cómo leer o usar 
 - **Niveles 1 y 2:** un atajo logra el óptimo en la mayoría de sus árboles, así que acertar ahí no demuestra que el modelo optimice.
 - **Respuestas forzadas:** se califican igual que las demás, aunque el modelo no terminó de razonar. Por eso conviene mirar `cortes` junto con la recompensa.
 - **Diferencia entre LM Studio y Colab:** el modelo, la cuantización y el muestreo son distintos, así que sus resultados no son directamente comparables.
-- **Formato de chat en LM Studio:** la respuesta forzada usa el `formato` indicado a `ModeloLMStudio`, que por defecto es `QWEN`. `modelo.py` también trae `LLAMA`, `OLMO`, `DEEPSEEK` y `MINISTRAL`. Un formato incorrecto no da error, pero altera los resultados. `LLAMA` omite la fecha actual que agrega su plantilla original.
+- **Formato de chat en LM Studio:** la respuesta forzada usa el `formato` indicado a `ModeloLMStudio`, que por defecto es `QWEN`. `src/modelo.py` también trae `LLAMA`, `OLMO`, `DEEPSEEK` y `MINISTRAL`. Un formato incorrecto no da error, pero altera los resultados. `LLAMA` omite la fecha actual que agrega su plantilla original.
 - **Etiquetas de razonamiento en Transformers:** el cierre forzado de `ModeloTransformers` solo reconoce `<think>`. Un modelo que razone con otra etiqueta recibe `<respuesta>`, pero su razonamiento no se cierra como tal.
 
 El ambiente tampoco incluye un ciclo de entrenamiento: entrega el prompt y la recompensa, y el algoritmo de RL queda por agregar.

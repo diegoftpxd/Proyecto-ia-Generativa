@@ -2,15 +2,15 @@ import json
 import random
 from pathlib import Path
 
-from generador import NIVELES, Nivel, generar_instancia
-from instancia import Instancia
-from prompt import generar_prompt
+from src.generador import NIVELES, Nivel, generar_instancia
+from src.instancia import Instancia
+from src.prompt import generar_prompt
 
 ENTRENAMIENTO_POR_NIVEL = 800
 EVALUACION_POR_NIVEL = 20
 TEST_POR_NIVEL = 20
 INTENTOS_POR_EJEMPLO = 50  # Los niveles chicos tienen pocos árboles distintos y se agotan antes
-CARPETA = Path(__file__).parent / "datos"
+CARPETA = Path(__file__).parent.parent / "datos"  # datos/ está junto a src/
 
 
 def resolver(instancia: Instancia) -> tuple[set[int], str]:

@@ -10,15 +10,15 @@ from importlib.util import find_spec
 from itertools import combinations
 from pathlib import Path
 
-from dataset import agregar_arboles, forma_canonica, generar_datasets, guardar_datasets, resolver
-from entorno import EntornoSeleccion, calcular_recompensa, evaluar_respuesta, reward
-from evaluacion import evaluar_dataset, evaluar_modelo, evaluar_varios, leer_resultados, resumir, resumir_pass
-from generador import NIVELES, Nivel, generar_instancia
-from modelo_hf import ModeloTransformers, extraer_respuesta
-from instancia import Instancia
-from modelo import DEEPSEEK, LLAMA, MINISTRAL, OLMO, ModeloLLM, ModeloLMStudio
-from prompt import generar_prompt, leer_prompt
-from trazas import aceptable, construir_dpo, construir_sft, resumir_generacion
+from src.dataset import agregar_arboles, forma_canonica, generar_datasets, guardar_datasets, resolver
+from src.entorno import EntornoSeleccion, calcular_recompensa, evaluar_respuesta, reward
+from src.evaluacion import evaluar_dataset, evaluar_modelo, evaluar_varios, leer_resultados, resumir, resumir_pass
+from src.generador import NIVELES, Nivel, generar_instancia
+from src.modelo_hf import ModeloTransformers, extraer_respuesta
+from src.instancia import Instancia
+from src.modelo import DEEPSEEK, LLAMA, MINISTRAL, OLMO, ModeloLLM, ModeloLMStudio
+from src.prompt import generar_prompt, leer_prompt
+from src.trazas import aceptable, construir_dpo, construir_sft, resumir_generacion
 
 
 def fuerza_bruta(instancia: Instancia) -> int:

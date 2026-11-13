@@ -1,7 +1,7 @@
 import random
 from dataclasses import dataclass
 
-from instancia import Instancia
+from src.instancia import Instancia
 
 INTENTOS_MAXIMOS = 2000
 

@@ -2,10 +2,10 @@
 
 Uso, desde seleccion_arbol/:
 
-    python trazas.py resultados/03_trazas_qwen95 --verificar
-    python trazas.py resultados/03_trazas_qwen95 --niveles 2 --max-problemas 10
-    python trazas.py resultados/03_trazas_qwen95
-    python trazas.py resultados/03_trazas_qwen95 --solo-construir
+    python -m src.trazas resultados/03_trazas_qwen95 --verificar
+    python -m src.trazas resultados/03_trazas_qwen95 --niveles 2 --max-problemas 10
+    python -m src.trazas resultados/03_trazas_qwen95
+    python -m src.trazas resultados/03_trazas_qwen95 --solo-construir
 
 La primera etapa muestrea el modelo contra los problemas de datos/entrenamiento.jsonl
 y guarda todo en resultados/<carpeta>/muestras.jsonl. La segunda filtra esas muestras
@@ -30,10 +30,10 @@ import urllib.request
 from collections import defaultdict
 from pathlib import Path
 
-from entorno import evaluar_respuesta
-from evaluacion import leer_resultados
-from instancia import Instancia
-from modelo import ModeloLMStudio
+from src.entorno import evaluar_respuesta
+from src.evaluacion import leer_resultados
+from src.instancia import Instancia
+from src.modelo import ModeloLMStudio
 
 COLUMNAS_RESUMEN = [
     "nivel", "problemas", "muestras", "correctas", "aceptables", "yield", "yield_aceptable",

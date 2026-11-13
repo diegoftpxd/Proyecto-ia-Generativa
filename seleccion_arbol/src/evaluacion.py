@@ -3,11 +3,11 @@ import random
 import time
 from pathlib import Path
 
-from entorno import evaluar_respuesta
-from generador import NIVELES, generar_instancia
-from instancia import Instancia
-from modelo import ModeloLLM
-from prompt import generar_prompt
+from src.entorno import evaluar_respuesta
+from src.generador import NIVELES, generar_instancia
+from src.instancia import Instancia
+from src.modelo import ModeloLLM
+from src.prompt import generar_prompt
 
 
 def instancia_del_episodio(nivel: int, episodio: int, semilla: int = 0) -> Instancia:

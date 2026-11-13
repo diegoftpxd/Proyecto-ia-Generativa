@@ -1,6 +1,6 @@
 import gc
 
-from modelo import ModeloLLM
+from src.modelo import ModeloLLM
 
 CIERRE_RAZONAMIENTO = "\n</think>\n\n"
 
