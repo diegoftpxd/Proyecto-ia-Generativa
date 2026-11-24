@@ -168,24 +168,37 @@ Entregar varias listas no da lo mejor de cada una: solo vale la última. `Prueba
 
 Cada ejemplo trae `prompt`, `respuesta`, `razonamiento`, el árbol y sus puntajes de referencia. La respuesta y el razonamiento se calculan por código y se comprueban con el verificador. Si un árbol tiene varias soluciones óptimas, se guarda una: para calificar, usa `reward` en vez de comparar el texto.
 
+`datos/test_extra.jsonl` es un test adicional que crece con el tiempo. Cada ronda del último bucle de `baseline_lmstudio.ipynb` le agrega un árbol nuevo por nivel, del 2 al 8, distinto de todos los de `datos`. Hoy tiene 84 árboles, 12 por nivel.
+
 ### Datos derivados: SFT y DPO
 
-`python -m src.trazas resultados/03_trazas_qwen95` muestrea un modelo profesor contra `datos/entrenamiento.jsonl` y genera los datos derivados que pide el desafío:
+`python -m src.trazas resultados/04_trazas_500` muestrea un modelo profesor contra `datos/entrenamiento.jsonl` y genera los datos derivados que pide el desafío:
 
 - `datos/sft.jsonl`: trazas correctas (`recompensa == 1.0`, sin corte y sin respuesta forzada), una por problema, en formato `messages`.
 - `datos/dpo.jsonl`: pares `prompt`/`chosen`/`rejected` del mismo problema. El rechazo tiene recompensa entre 0.2 y 0.9: no es una respuesta inválida, sino una solución plausible pero peor.
-- `datos/sft_solver.jsonl`: plus con las trazas que narra la programación dinámica de `src/dataset.py`. Son correctas por construcción, pero no reemplazan a las del modelo.
+- `datos/sft_solver.jsonl`: plus con las trazas que narra la programación dinámica de `src/dataset.py`. Son correctas por construcción, pero no reemplazan a las del modelo. Se genera con `incluir_solver: true`, pero no está en el repositorio.
 
 El muestreo es secuencial hasta el primer éxito: por problema se generan hasta `muestras_por_problema` respuestas (6 por defecto) y se corta al obtener una correcta. Los intentos fallidos del camino se guardan y son los rechazos de DPO. Todo queda en `resultados/<carpeta>/muestras.jsonl`, así que `--solo-construir` rehace los datasets sin volver a llamar al modelo.
 
 `configuracion.json` define el modelo, la temperatura, el presupuesto, la cuota por nivel y los umbrales. Antes de una corrida larga conviene probar:
 
 ```bash
-python -m src.trazas resultados/03_trazas_qwen95 --verificar
-python -m src.trazas resultados/03_trazas_qwen95 --niveles 2 --max-problemas 5
+python -m src.trazas resultados/04_trazas_500 --verificar
+python -m src.trazas resultados/04_trazas_500 --niveles 2 --max-problemas 5
 ```
 
 El resumen queda en `resultados/<carpeta>/generacion.csv`, con yield, cortes, inválidas y trazas por nivel. Si un nivel no alcanza la cuota, el archivo lo muestra: es preferible reportar el déficit a rellenar con trazas cortadas.
+
+Los datos actuales vienen de `resultados/04_trazas_500`: Qwen 3.5 9B (GGUF Q4_K_M) en LM Studio, sin razonamiento oculto, temperatura 0,8 y 4096 tokens para pensar. El repositorio guarda su `configuracion.json` y su `generacion.csv`, pero no `muestras.jsonl`, así que `--solo-construir` necesita la copia local de esa corrida.
+
+| Nivel | Problemas | Muestras | Yield | Cortes | Trazas SFT (cuota) | Pares DPO |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2 | 251 | 355 | 70,4% | 1,4% | 250 (250) | 78 |
+| 3 | 229 | 540 | 37,6% | 49,1% | 200 (200) | 37 |
+| 4 | 126 | 694 | 3,7% | 95,4% | 23 (50) | 0 |
+| Total | 606 | 1589 | 30,1% | 58,7% | 473 (500) | 115 (250) |
+
+El nivel 4 quedó en déficit porque casi todas sus respuestas agotaron los tokens, no porque faltaran problemas. Para completarlo conviene subir `tokens_pensamiento` y el contexto de LM Studio antes que `muestras_por_problema`. Tampoco se alcanzó el objetivo de 250 pares DPO: hay pocos rechazos con recompensa entre 0,2 y 0,9.
 
 ### Verificación del óptimo
 
@@ -227,7 +240,7 @@ cd Proyecto-ia-Generativa/seleccion_arbol
 python -m unittest src.test_ambiente
 ```
 
-Deben pasar las 44 pruebas. Se comprobó en el entorno de conda `tipico`, que tiene `pandas` y `numpy`.
+Deben pasar las 63 pruebas. Se comprobó en el entorno de conda `tipico`, que tiene `pandas` y `numpy`. Sin ellos, las 9 pruebas de resúmenes fallan con `ImportError`.
 
 ### 2. Probar el ambiente sin un modelo
 
@@ -329,29 +342,37 @@ Para el baseline en test, usa `baseline_lmstudio.ipynb` con el kernel del entorn
 
 ### Resultados hasta ahora
 
-Qwen solo logró el óptimo hasta el nivel 3, y 7 de 21 respuestas fueron inválidas. En total hubo 3 óptimos, 2 respuestas sobre la regla sin llegar al óptimo y 9 bajo la regla.
+Ningún modelo supera en promedio al mejor atajo: todas las recompensas medias quedan bajo 0,5. Ministral 3B es el mejor en pass@1 y en recompensa media, pero también entrega muchas respuestas inválidas. OLMo 1B tiene recompensa media negativa por sus respuestas inválidas.
 
-Cada celda muestra la recompensa y, entre paréntesis, el puntaje frente al óptimo y a la regla simple. Corresponde a Qwen 2B (GGUF Q4_K_M) en LM Studio, con semilla 3, el 1 de noviembre de 2026.
+Baseline en `datos/test.jsonl` (160 árboles, niveles 1 a 8):
 
-| Nivel | Nodos | Episodio 1 | Episodio 2 | Episodio 3 |
+| Modelo | Intentos | pass@1 | Inválidas | Recompensa media |
 | --- | --- | --- | --- | --- |
-| 2 | 4 | 1,000 (16 de 16, regla 11) | 1,000 (11 de 11, regla 5) | -1,000 (eligió un nodo inexistente) |
-| 3 | 5 | -1,000 (se cortó a 12000 tokens) | 0,312 (5 de 12, regla 8) | 1,000 (10 de 10, regla 6) |
-| 4 | 7 | -1,000 (se cortó a 12000 tokens) | 0,543 (2 de 23, regla 0) | -1,000 (se cortó a 12000 tokens) |
-| 5 | 10 | 0,438 (28 de 48, regla 32) | -1,000 (se cortó a 12000 tokens) | 0,083 (3 de 38, regla 18) |
-| 6 | 15 | 0,981 (72 de 73, regla 47) | -1,000 (se cortó a 12000 tokens) | 0,219 (21 de 88, regla 48) |
-| 7 | 25 | -1,000 (se cortó a 12000 tokens) | 0,375 (54 de 153, regla 72) | 0,109 (28 de 186, regla 128) |
-| 8 | 40 | 0,485 (126 de 291, regla 130) | 0,072 (39 de 386, regla 270) | 0,000 (0 de 310, regla 162) |
+| Ministral 3 3B Reasoning 4bit | 640 | 0,292 | 12,3% | 0,328 |
+| DeepSeek R1 Distill 1.5B | 840 | 0,098 | 2,4% | 0,272 |
+| Llama 3.2 1B | 840 | 0,057 | 0,0% | 0,238 |
+| Qwen 3.5 2B | 640 | 0,059 | 4,8% | 0,178 |
+| OLMo 2 1B | 840 | 0,058 | 23,8% | -0,034 |
 
-Cada nivel tiene solo 3 episodios, así que estos resultados orientan pero no miden con precisión. De los 7 inválidos, 6 se deben a agotar los tokens y no a una mala selección. Por eso conviene reportar los cortes aparte de la recompensa media.
+Baseline en `datos/test_extra.jsonl` (niveles 2 a 8; no todos los modelos llegaron al mismo número de árboles):
 
-En Colab con los pesos originales, los 2 primeros episodios del nivel 2 se cortaron a los 12000 tokens. Todos estos resultados son anteriores a los presupuestos de tokens, a la referencia del mejor atajo y al filtro desde el nivel 3, así que no se comparan directamente con los actuales. La línea base vigente se obtiene con `baseline_lmstudio.ipynb`.
+| Modelo | Árboles | Intentos | pass@1 | Inválidas | Recompensa media |
+| --- | --- | --- | --- | --- | --- |
+| DeepSeek R1 Distill 1.5B | 84 | 336 | 0,012 | 1,2% | 0,212 |
+| Llama 3.2 1B | 77 | 308 | 0,013 | 0,6% | 0,181 |
+| Qwen 3.5 2B | 80 | 317 | 0,003 | 7,3% | 0,091 |
+| OLMo 2 1B | 77 | 308 | 0,000 | 34,4% | -0,221 |
+| Ministral 3 3B Reasoning 4bit | | | | | Sin corrida |
 
-Cada modelo tiene su carpeta en `BaseLines/`, con un solo archivo `baseline_test.jsonl` y un `configuracion.json` que describe cada ejecución. La columna `modelo` solo tiene el nombre del modelo. Cuando un modelo tiene dos corridas sobre los mismos árboles, la segunda usa los intentos 4 a 6. Todas las recompensas están calculadas con el verificador actual.
+Las tablas mezclan todos los niveles, y los modelos no tienen el mismo número de intentos por árbol. En `test.jsonl`, Ministral y Qwen tienen 4 intentos por árbol. Los demás tienen 4 en los niveles 1, 7 y 8, y 6 en los niveles 2 a 6, porque una segunda corrida agregó los intentos 4 a 6. Para comparar con justicia, usa `resumir_pass(ruta, k)` por nivel.
+
+Cada modelo tiene su carpeta en `BaseLines/`, con `baseline_test.jsonl`, `baseline_test_extra.jsonl` si se evaluó en el test extra y un `configuracion.json` que describe cada ejecución. Algunas carpetas guardan además `corrida.log` o el `prompt.py` usado. La columna `modelo` solo tiene el nombre del modelo. Todas las recompensas están calculadas con el verificador actual.
+
+La primera prueba, con Qwen 2B en LM Studio el 1 de noviembre de 2026 (3 episodios por nivel), es anterior a los presupuestos de tokens, a la referencia del mejor atajo y al filtro desde el nivel 3, así que no se compara con estas tablas. En esa prueba, 6 de las 7 respuestas inválidas se debieron a agotar los 12000 tokens. Por eso conviene reportar los cortes aparte de la recompensa media.
 
 ## Limitaciones conocidas
 
-El ambiente está probado, pero hay cuatro puntos que afectan cómo leer o usar sus resultados.
+El ambiente está probado, pero hay seis puntos que afectan cómo leer o usar sus resultados.
 
 - **Otros atajos:** el filtro cubre dos estrategias conocidas. Un modelo podría encontrar otra regla que rinda bien sin optimizar; conviene revisar sus trazas al entrenar.
 - **Niveles 1 y 2:** un atajo logra el óptimo en la mayoría de sus árboles, así que acertar ahí no demuestra que el modelo optimice.
