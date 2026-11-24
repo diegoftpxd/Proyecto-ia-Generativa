@@ -176,7 +176,7 @@ Cada ejemplo trae `prompt`, `respuesta`, `razonamiento`, el árbol y sus puntaje
 
 - `datos/sft.jsonl`: trazas correctas (`recompensa == 1.0`, sin corte y sin respuesta forzada), una por problema, en formato `messages`.
 - `datos/dpo.jsonl`: pares `prompt`/`chosen`/`rejected` del mismo problema. El rechazo tiene recompensa entre 0.2 y 0.9: no es una respuesta inválida, sino una solución plausible pero peor.
-- `datos/sft_solver.jsonl`: plus con las trazas que narra la programación dinámica de `src/dataset.py`. Son correctas por construcción, pero no reemplazan a las del modelo. Se genera con `incluir_solver: true`, pero no está en el repositorio.
+- `datos/sft_solver.jsonl`: plus con las trazas que narra la programación dinámica de `src/dataset.py`. Son correctas por construcción, pero no reemplazan a las del modelo. La versión del repositorio sirve de punto de comparación: tiene los mismos 473 problemas de `datos/sft.jsonl`, en el mismo orden, así que un SFT con cada archivo usa los mismos problemas para entrenar y validar, y solo cambia el estilo de la traza.
 
 El muestreo es secuencial hasta el primer éxito: por problema se generan hasta `muestras_por_problema` respuestas (6 por defecto) y se corta al obtener una correcta. Los intentos fallidos del camino se guardan y son los rechazos de DPO. Todo queda en `resultados/<carpeta>/muestras.jsonl`, así que `--solo-construir` rehace los datasets sin volver a llamar al modelo.
 
