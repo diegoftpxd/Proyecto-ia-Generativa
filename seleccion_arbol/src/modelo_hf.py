@@ -18,6 +18,24 @@ def extraer_respuesta(prompt: str, texto: str) -> str:
     return texto.strip()
 
 
+class HastaCierre:
+    # Criterio de parada de generate: corta cada fila cuando lo generado desde `inicio` contiene `cierre`.
+    # Reemplaza a stop_strings, que en transformers 5 usa métodos internos que el tokenizador de Mistral
+    # (MistralCommonBackend) no tiene. Este solo necesita decode, que tiene cualquier tokenizador.
+    def __init__(self, tokenizador, inicio: int, cierre: str = "</respuesta>"):
+        self.tokenizador = tokenizador
+        self.inicio = inicio
+        self.cierre = cierre
+
+    def __call__(self, input_ids, scores=None, **opciones):
+        import torch
+
+        terminadas = [
+            self.cierre in self.tokenizador.decode(fila[self.inicio:], skip_special_tokens=True) for fila in input_ids
+        ]
+        return torch.tensor(terminadas, dtype=torch.bool, device=input_ids.device)
+
+
 class ModeloTransformers(ModeloLLM):
     # El modelo se carga en la primera consulta: si ya está evaluado, no ocupa la GPU.
     def __init__(
@@ -89,8 +107,7 @@ class ModeloTransformers(ModeloLLM):
                 salida = self._continuar(
                     {"input_ids": salida, "attention_mask": torch.ones_like(salida)},
                     self.tokens_respuesta,
-                    stop_strings=["</respuesta>"],
-                    tokenizer=self._tokenizador,
+                    stopping_criteria=[HastaCierre(self._tokenizador, largo_previo)],
                 )
                 texto = self._decodificar(salida, largo_prompt)
                 # Una lista cortada por el presupuesto no se cierra: podría parecer válida sin serlo.

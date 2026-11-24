@@ -14,7 +14,7 @@ from src.dataset import agregar_arboles, forma_canonica, generar_datasets, guard
 from src.entorno import EntornoSeleccion, calcular_recompensa, evaluar_respuesta, reward
 from src.evaluacion import evaluar_dataset, evaluar_modelo, evaluar_varios, leer_resultados, resumir, resumir_pass
 from src.generador import NIVELES, Nivel, generar_instancia
-from src.modelo_hf import ModeloTransformers, extraer_respuesta
+from src.modelo_hf import HastaCierre, ModeloTransformers, extraer_respuesta
 from src.instancia import Instancia
 from src.modelo import DEEPSEEK, LLAMA, MINISTRAL, OLMO, ModeloLLM, ModeloLMStudio
 from src.prompt import generar_prompt, leer_prompt
@@ -574,6 +574,22 @@ class PruebasPresupuestoTransformers(unittest.TestCase):
     def test_respuesta_cortada_no_se_cierra(self):
         texto, _ = self.consultar("p" * 50, "1 2 3 4 5 6 7 8", tokens_respuesta=5)
         self.assertEqual(evaluar_respuesta(CAMINO, texto).recompensa, -1.0)
+
+    def test_parada_en_el_cierre_solo_usa_decode(self):
+        # El tokenizador de Mistral no tiene los métodos internos que pide stop_strings: basta con decode.
+        import torch
+
+        class SoloDecode:
+            def decode(self, ids, skip_special_tokens=True):
+                return "".join(chr(i) for i in ids.tolist())
+
+        def ids(texto):
+            return [ord(c) for c in texto]
+
+        prefijo = "</respuesta><respuesta>"  # Un cierre anterior al inicio no cuenta
+        filas = torch.tensor([ids(prefijo + "1 3</respuesta>"), ids(prefijo + "1 3 4 5 6 7 8 9")])
+        parada = HastaCierre(SoloDecode(), inicio=len(prefijo))(filas, None)
+        self.assertEqual(parada.tolist(), [True, False])
 
 
 class PruebasEvaluarDataset(unittest.TestCase):
