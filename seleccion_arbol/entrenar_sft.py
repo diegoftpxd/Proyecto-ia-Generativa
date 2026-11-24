@@ -170,7 +170,7 @@ def main() -> None:
             max_steps=argumentos.max_pasos,
             learning_rate=argumentos.tasa,
             lr_scheduler_type="cosine",
-            warmup_ratio=0.05,
+            warmup_steps=0.05,  # En transformers 5, un valor menor que 1 es la fracción de los pasos totales
             per_device_train_batch_size=argumentos.lote,
             per_device_eval_batch_size=argumentos.lote,
             gradient_accumulation_steps=argumentos.acumulacion,
