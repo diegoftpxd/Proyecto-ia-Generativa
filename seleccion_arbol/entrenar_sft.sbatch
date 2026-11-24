@@ -12,13 +12,11 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=48gb
-#SBATCH --partition=ialab-low-unlimit
-#SBATCH --qos=debug
-#SBATCH --nodelist=peteroa               # H100 HGX de 80 GB
-#SBATCH --gres=gpu:1
+#SBATCH --partition=peteroa-default
+#SBATCH --gres=gpu:h100:1                # H100 HGX de 80 GB
 #SBATCH --output=slurm/logs/%x-%j.out
 #SBATCH --error=slurm/logs/%x-%j.err
-#SBATCH --time=1:00:00                   # ~84 pasos; si se corta, reenviar y retoma
+#SBATCH --time=3:00:00                   # ~84 pasos; si se corta, reenviar y retoma
 
 set -euo pipefail
 
