@@ -13,6 +13,7 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=48gb
 #SBATCH --partition=peteroa-default
+#SBATCH --qos=regular                    # para la prueba corta: sbatch --qos=debug entrenar_sft.sbatch --max-pasos 5 ...
 #SBATCH --gres=gpu:h100:1                # H100 HGX de 80 GB
 #SBATCH --output=slurm/logs/%x-%j.out
 #SBATCH --error=slurm/logs/%x-%j.err
