@@ -27,8 +27,10 @@ class ModeloTransformers(ModeloLLM):
         temperatura: float = 0.7,
         tokens_pensamiento: int = 8192,
         tokens_respuesta: int = 200,
+        adaptador: str | None = None,
     ):
         self.nombre = nombre
+        self.adaptador = adaptador  # Carpeta de un adaptador LoRA entrenado sobre `nombre`, como el de entrenar_sft.py
         self.razonar = razonar  # None usa lo que el modelo haga por defecto
         self.temperatura = temperatura
         self.tokens_pensamiento = tokens_pensamiento
@@ -52,6 +54,11 @@ class ModeloTransformers(ModeloLLM):
             self._modelo = AutoModelForCausalLM.from_pretrained(
                 self.nombre, torch_dtype="auto", device_map="auto"
             )
+        if self.adaptador:
+            from peft import PeftModel
+
+            # Se fusiona con los pesos: el modelo queda igual que el base y genera a la misma velocidad.
+            self._modelo = PeftModel.from_pretrained(self._modelo, self.adaptador).merge_and_unload()
 
     def generar(self, prompt: str) -> str:
         import torch
