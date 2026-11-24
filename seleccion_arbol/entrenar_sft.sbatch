@@ -1,19 +1,24 @@
 #!/bin/bash
 # SFT de Ministral 3 3B Reasoning en Slurm. Enviar desde la carpeta seleccion_arbol:
+#   mkdir -p slurm/logs                     (una vez: Slurm no crea la carpeta de los logs)
 #   sbatch entrenar_sft.sbatch
 #   sbatch entrenar_sft.sbatch --max-pasos 5 --salida resultados/sft_prueba   (los argumentos van a entrenar_sft.py)
 # Si el trabajo se corta por tiempo, volver a enviarlo con la misma --salida retoma desde el último checkpoint.
 #
-# Ajusta partición y cuenta a tu cluster (descomenta las líneas). Los valores por defecto de entrenar_sft.py
-# están pensados para una GPU de 80 GB; con una de 24 GB, agrega --lote 1 --acumulacion 16.
+# Los valores por defecto de entrenar_sft.py están pensados para una GPU de 80 GB; con una de 24 GB,
+# agrega --lote 1 --acumulacion 16.
 #SBATCH --job-name=sft-ministral
+#SBATCH --comment="Proyecto IA Generativa: SFT con LoRA de Ministral 3 3B Reasoning sobre datos/sft.jsonl"
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=48gb
+#SBATCH --partition=ialab-low-unlimit
+#SBATCH --qos=debug
+#SBATCH --nodelist=peteroa               # H100 HGX de 80 GB
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=48G
-#SBATCH --time=12:00:00
-#SBATCH --output=sft-ministral-%j.out
-##SBATCH --partition=gpu
-##SBATCH --account=mi_cuenta
+#SBATCH --output=slurm/logs/%x-%j.out
+#SBATCH --error=slurm/logs/%x-%j.err
+#SBATCH --time=1:00:00                   # ~84 pasos; si se corta, reenviar y retoma
 
 set -euo pipefail
 

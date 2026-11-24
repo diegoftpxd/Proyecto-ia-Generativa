@@ -7,3 +7,4 @@ ProyectoCurso-2026.md
 
 # Checkpoints de entrenamiento (pesados; el adaptador final queda en final/)
 seleccion_arbol/resultados/*/checkpoint-*/
+seleccion_arbol/slurm/logs/
