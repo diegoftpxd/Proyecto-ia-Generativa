@@ -863,5 +863,82 @@ class PruebasTrazas(unittest.TestCase):
         self.assertEqual(sum(1 for ejemplo in sft if ejemplo["nivel"] == 3), 1)
 
 
+class PruebasGRPO(unittest.TestCase):
+    def test_ventajas_por_grupo(self):
+        from entrenar_grpo import ventajas
+
+        self.assertEqual(ventajas([1.0, 0.0, 0.5, 0.5], 2), [0.5, -0.5, 0.0, 0.0])
+        # Un grupo de recompensas iguales da ventaja exactamente 0, aunque la media en punto flotante no sea exacta.
+        self.assertEqual(ventajas([0.1] * 8, 8), [0.0] * 8)
+
+    def test_recortar_en_el_fin_de_secuencia(self):
+        from entrenar_grpo import recortar
+
+        self.assertEqual(recortar([5, 6, 2, 0, 0], {2}), ([5, 6, 2], True))
+        self.assertEqual(recortar([5, 6, 7], {2}), ([5, 6, 7], False))
+
+    def test_problemas_del_paso_sin_repetir_y_reproducibles(self):
+        from entrenar_grpo import problemas_del_paso
+
+        problemas = [{"id": i} for i in range(50)]
+        lote = problemas_del_paso(problemas, 3, 12, 0)
+        self.assertEqual(len({p["id"] for p in lote}), 12)
+        self.assertEqual(lote, problemas_del_paso(problemas, 3, 12, 0))  # Igual al retomar
+        self.assertNotEqual(lote, problemas_del_paso(problemas, 4, 12, 0))
+
+    def _grupos(self):
+        return [
+            {"id": "a", "nivel": 5, "recompensas": [1.0, 0.5], "tokens": [300, 400], "cortadas": [False, False]},
+            {"id": "b", "nivel": 7, "recompensas": [-1.0, -1.0], "tokens": [2048, 2048], "cortadas": [True, True]},
+        ]
+
+    def test_filas_recompensas_una_por_respuesta(self):
+        from entrenar_grpo import COLUMNAS_RECOMPENSAS, filas_recompensas
+
+        filas = filas_recompensas(4, self._grupos())
+        self.assertEqual(len(filas), 4)
+        self.assertEqual(set(filas[0]), set(COLUMNAS_RECOMPENSAS))
+        self.assertEqual(filas[0], {"paso": 4, "id": "a", "nivel": 5, "generacion": 0, "recompensa": 1.0,
+                                    "optima": 1, "tokens": 300, "cortada": 0})
+        self.assertEqual(filas[3]["cortada"], 1)
+
+    def test_filas_metricas_por_nivel_y_total(self):
+        from entrenar_grpo import COLUMNAS_METRICAS, filas_metricas
+
+        filas = filas_metricas(4, self._grupos(), 1e-5, 0.3, 12.0)
+        self.assertEqual([f["nivel"] for f in filas], [5, 7, "todos"])
+        self.assertEqual(set(filas[0]), set(COLUMNAS_METRICAS))
+        self.assertEqual(filas[0]["recompensa_media"], 0.75)
+        self.assertEqual(filas[0]["grupos_con_senal"], 1)
+        self.assertEqual(filas[1]["cortadas"], 1.0)
+        self.assertEqual(filas[1]["grupos_con_senal"], 0)
+        self.assertEqual(filas[2]["recompensa_media"], -0.125)
+        self.assertEqual(filas[2]["recompensa_min"], -1.0)
+        self.assertEqual(filas[2]["optimas"], 0.25)
+
+    def test_preparar_csv_descarta_los_pasos_que_se_repiten(self):
+        from entrenar_grpo import COLUMNAS_METRICAS, agregar_csv, filas_metricas, preparar_csv
+
+        with tempfile.TemporaryDirectory() as carpeta:
+            ruta = Path(carpeta) / "metricas.csv"
+            preparar_csv(ruta, COLUMNAS_METRICAS, 0)
+            for paso in range(3):
+                agregar_csv(ruta, COLUMNAS_METRICAS, filas_metricas(paso, self._grupos(), 1e-5, 0.3, 1.0))
+            filas = preparar_csv(ruta, COLUMNAS_METRICAS, 2)  # Retoma desde el checkpoint del paso 2
+            self.assertEqual(sorted({int(f["paso"]) for f in filas}), [0, 1])
+            self.assertEqual(len(preparar_csv(ruta, COLUMNAS_METRICAS, 2)), 6)  # El archivo quedó recortado
+
+    def test_tasa_con_calentamiento(self):
+        from entrenar_grpo import tasa_del_paso
+
+        self.assertAlmostEqual(tasa_del_paso(0, 1e-5, 10), 1e-6)
+        self.assertEqual(tasa_del_paso(50, 1e-5, 10), 1e-5)
+
+    def test_adaptadores_en_orden(self):
+        self.assertEqual(ModeloTransformers("x").adaptadores, [])
+        self.assertEqual(ModeloTransformers("x", adaptador="a").adaptadores, ["a"])
+        self.assertEqual(ModeloTransformers("x", adaptador=["sft", "grpo"]).adaptadores, ["sft", "grpo"])
+
+
 if __name__ == "__main__":
     unittest.main()

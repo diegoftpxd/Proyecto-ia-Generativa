@@ -9,10 +9,12 @@
 #     "pandas>=2.0",
 # ]
 # ///
-# Evalúa Ministral 3 3B Reasoning, con o sin un adaptador de entrenar_sft.py, en datos/test.jsonl.
+# Evalúa Ministral 3 3B Reasoning, con o sin adaptadores de entrenar_sft.py o entrenar_grpo.py, en datos/test.jsonl.
 # Usa el presupuesto del baseline de Ministral, así que sus resultados se comparan con BaseLines/. Ejecutar desde esta carpeta:
 #   uv run evaluar_sft.py --nombre "Ministral 3 3B SFT solver" --adaptador resultados/06_sft_ministral_solver/final
 #   uv run evaluar_sft.py --nombre "Ministral 3 3B Reasoning bf16"        el modelo base, sin adaptador
+#   uv run evaluar_sft.py --nombre "Ministral 3 3B GRPO" #       --adaptador resultados/07_sft_ministral_solver_masivo/final resultados/08_grpo_ministral/final
+#   Con GRPO van los dos adaptadores, en ese orden: el de GRPO se entrenó sobre el modelo con el SFT fusionado.
 # Cada intento se guarda al terminar: si el trabajo se corta, repetir el comando retoma donde quedó.
 import argparse
 import json
@@ -28,7 +30,8 @@ MODELO = "mistralai/Ministral-3-3B-Reasoning-2512"
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evalúa Ministral, con o sin adaptador LoRA, en el test.")
     parser.add_argument("--nombre", required=True, help="nombre del modelo en los resultados y de su carpeta en BaseLines")
-    parser.add_argument("--adaptador", help="carpeta final/ de entrenar_sft.py; sin ella se evalúa el modelo base")
+    parser.add_argument("--adaptador", nargs="+", default=[],
+                        help="carpetas de adaptadores LoRA, que se fusionan en orden; sin ellas se evalúa el modelo base")
     parser.add_argument("--datos", default="datos/test.jsonl")
     parser.add_argument("--intentos", type=int, default=4, help="intentos por árbol, como el baseline")
     # El presupuesto y la temperatura del baseline de Ministral (BaseLines/Ministral 3 3B Reasoning 4bit).
@@ -41,8 +44,9 @@ def main() -> None:
 
     if not torch.cuda.is_available():
         raise SystemExit("No hay GPU disponible: la evaluación necesita CUDA.")
-    if argumentos.adaptador and not (Path(argumentos.adaptador) / "adapter_config.json").exists():
-        raise SystemExit(f"No hay un adaptador en {argumentos.adaptador}: falta adapter_config.json.")
+    for adaptador in argumentos.adaptador:
+        if not (Path(adaptador) / "adapter_config.json").exists():
+            raise SystemExit(f"No hay un adaptador en {adaptador}: falta adapter_config.json.")
 
     carpeta = Path("BaseLines") / argumentos.nombre
     carpeta.mkdir(parents=True, exist_ok=True)
@@ -53,7 +57,7 @@ def main() -> None:
             "archivo": ruta.name,
             "modelo_base": MODELO,
             "adaptador": argumentos.adaptador,
-            "ejecucion": "Transformers en bf16, con el adaptador LoRA fusionado" if argumentos.adaptador
+            "ejecucion": "Transformers en bf16, con los adaptadores LoRA fusionados en orden" if argumentos.adaptador
                          else "Transformers en bf16",
             "hardware": torch.cuda.get_device_name(0),
             "datos": argumentos.datos,

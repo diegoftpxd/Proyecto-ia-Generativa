@@ -36,6 +36,21 @@ class HastaCierre:
         return torch.tensor(terminadas, dtype=torch.bool, device=input_ids.device)
 
 
+def tokenizar_prompt(tokenizador, prompt: str, razonar: bool | None, **opciones):
+    # Se tokeniza dentro de la plantilla. Tokenizar su texto aparte duplica el token de inicio (Llama)
+    # y codifica como texto los tokens de control, como [INST] en Mistral. razonar=None usa lo que el
+    # modelo haga por defecto. entrenar_grpo.py la usa para que el entrenamiento vea el prompt de la evaluación.
+    if razonar is not None:
+        opciones["enable_thinking"] = razonar
+    return tokenizador.apply_chat_template(
+        [{"role": "user", "content": prompt}],
+        tokenize=True,
+        add_generation_prompt=True,
+        return_dict=True,
+        **opciones,
+    )
+
+
 class ModeloTransformers(ModeloLLM):
     # El modelo se carga en la primera consulta: si ya está evaluado, no ocupa la GPU.
     def __init__(
@@ -45,10 +60,12 @@ class ModeloTransformers(ModeloLLM):
         temperatura: float = 0.7,
         tokens_pensamiento: int = 8192,
         tokens_respuesta: int = 200,
-        adaptador: str | None = None,
+        adaptador: str | list[str] | None = None,
     ):
         self.nombre = nombre
-        self.adaptador = adaptador  # Carpeta de un adaptador LoRA entrenado sobre `nombre`, como el de entrenar_sft.py
+        # Carpetas de adaptadores LoRA, como los de entrenar_sft.py y entrenar_grpo.py. Se fusionan en orden:
+        # el de GRPO se entrenó sobre el modelo con el SFT ya fusionado, así que va después de él.
+        self.adaptadores = [adaptador] if isinstance(adaptador, str) else list(adaptador or [])
         self.razonar = razonar  # None usa lo que el modelo haga por defecto
         self.temperatura = temperatura
         self.tokens_pensamiento = tokens_pensamiento
@@ -72,11 +89,12 @@ class ModeloTransformers(ModeloLLM):
             self._modelo = AutoModelForCausalLM.from_pretrained(
                 self.nombre, torch_dtype="auto", device_map="auto"
             )
-        if self.adaptador:
+        if self.adaptadores:
             from peft import PeftModel
 
-            # Se fusiona con los pesos: el modelo queda igual que el base y genera a la misma velocidad.
-            self._modelo = PeftModel.from_pretrained(self._modelo, self.adaptador).merge_and_unload()
+            # Se fusionan con los pesos: el modelo queda igual que el base y genera a la misma velocidad.
+            for adaptador in self.adaptadores:
+                self._modelo = PeftModel.from_pretrained(self._modelo, adaptador).merge_and_unload()
 
     def generar(self, prompt: str) -> str:
         import torch
@@ -119,17 +137,7 @@ class ModeloTransformers(ModeloLLM):
         return extraer_respuesta(texto_prompt, texto)
 
     def _preparar(self, prompt: str):
-        # Se tokeniza dentro de la plantilla. Tokenizar su texto aparte duplica el token de inicio (Llama)
-        # y codifica como texto los tokens de control, como [INST] en Mistral.
-        opciones = {} if self.razonar is None else {"enable_thinking": self.razonar}
-        entrada = self._tokenizador.apply_chat_template(
-            [{"role": "user", "content": prompt}],
-            tokenize=True,
-            add_generation_prompt=True,
-            return_dict=True,
-            return_tensors="pt",
-            **opciones,
-        )
+        entrada = tokenizar_prompt(self._tokenizador, prompt, self.razonar, return_tensors="pt")
         # El texto solo se usa para saber si la plantilla abrió el razonamiento con <think>.
         texto_prompt = self._tokenizador.decode(entrada["input_ids"][0], skip_special_tokens=False)
         return texto_prompt, entrada
