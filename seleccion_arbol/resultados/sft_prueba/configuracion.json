@@ -1,0 +1,17 @@
+{
+  "modelo": "mistralai/Ministral-3-3B-Reasoning-2512",
+  "datos": "datos/sft.jsonl",
+  "salida": "resultados/sft_prueba",
+  "epocas": 3,
+  "max_pasos": 5,
+  "tasa": 0.0001,
+  "lote": 4,
+  "acumulacion": 4,
+  "largo_maximo": 6144,
+  "fraccion_validacion": 0.05,
+  "rango_lora": 64,
+  "pasos_guardado": 20,
+  "checkpoints_maximos": 5,
+  "pasos_validacion": 10,
+  "semilla": 0
+}

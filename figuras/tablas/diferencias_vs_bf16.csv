@@ -1,0 +1,28 @@
+modelo,nivel,diferencia,IC 95% inf,IC 95% sup,significativa
+Ministral 3 3B Reasoning 4bit,todos,-0.0328125,-0.0640625,0.003125,False
+Ministral 3 3B Reasoning 4bit,1,0.05,-0.05,0.1625,False
+Ministral 3 3B Reasoning 4bit,2,-0.2125,-0.3128125,-0.1,True
+Ministral 3 3B Reasoning 4bit,3,-0.0125,-0.1625,0.15,False
+Ministral 3 3B Reasoning 4bit,4,-0.025,-0.125,0.075,False
+Ministral 3 3B Reasoning 4bit,5,-0.05,-0.15,0.0375,False
+Ministral 3 3B Reasoning 4bit,6,-0.0125,-0.0375,0.0,False
+Ministral 3 3B Reasoning 4bit,7,0.0,0.0,0.0,False
+Ministral 3 3B Reasoning 4bit,8,0.0,0.0,0.0,False
+Ministral 3 3B SFT Qwen,todos,0.1078125,0.065625,0.1469140624999998,True
+Ministral 3 3B SFT Qwen,1,0.1375,0.0,0.275,False
+Ministral 3 3B SFT Qwen,2,-0.0625,-0.15,0.025,False
+Ministral 3 3B SFT Qwen,3,0.325,0.1625,0.475,True
+Ministral 3 3B SFT Qwen,4,0.3375,0.175,0.5,True
+Ministral 3 3B SFT Qwen,5,0.1,-0.025,0.225,False
+Ministral 3 3B SFT Qwen,6,0.025,-0.025,0.075,False
+Ministral 3 3B SFT Qwen,7,0.0,0.0,0.0,False
+Ministral 3 3B SFT Qwen,8,0.0,0.0,0.0,False
+Ministral 3 3B SFT solver masivo,todos,0.3390625,0.2953125,0.3796875,True
+Ministral 3 3B SFT solver masivo,1,0.175,0.075,0.3,True
+Ministral 3 3B SFT solver masivo,2,0.1,0.025,0.175,True
+Ministral 3 3B SFT solver masivo,3,0.4,0.25,0.5625,True
+Ministral 3 3B SFT solver masivo,4,0.7375,0.6125,0.85,True
+Ministral 3 3B SFT solver masivo,5,0.7125,0.575,0.8375,True
+Ministral 3 3B SFT solver masivo,6,0.3625,0.225,0.5125,True
+Ministral 3 3B SFT solver masivo,7,0.2125,0.1125,0.325,True
+Ministral 3 3B SFT solver masivo,8,0.0125,0.0,0.0375,False

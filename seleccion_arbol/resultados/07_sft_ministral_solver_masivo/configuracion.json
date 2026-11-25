@@ -1,0 +1,17 @@
+{
+  "modelo": "mistralai/Ministral-3-3B-Reasoning-2512",
+  "datos": "datos/sft_solver_masivo.jsonl",
+  "salida": "resultados/07_sft_ministral_solver_masivo",
+  "epocas": 1.0,
+  "max_pasos": -1,
+  "tasa": 0.0001,
+  "lote": 8,
+  "acumulacion": 4,
+  "largo_maximo": 6144,
+  "fraccion_validacion": 0.02,
+  "rango_lora": 64,
+  "pasos_guardado": 50,
+  "checkpoints_maximos": 5,
+  "pasos_validacion": 20,
+  "semilla": 0
+}

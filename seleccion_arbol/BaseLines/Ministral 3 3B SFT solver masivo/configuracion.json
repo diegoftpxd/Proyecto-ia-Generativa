@@ -1,0 +1,16 @@
+{
+  "modelo": "Ministral 3 3B SFT solver masivo",
+  "archivo": "baseline_test.jsonl",
+  "modelo_base": "mistralai/Ministral-3-3B-Reasoning-2512",
+  "adaptador": "resultados/07_sft_ministral_solver_masivo/final",
+  "ejecucion": "Transformers en bf16, con el adaptador LoRA fusionado",
+  "hardware": "NVIDIA H100 80GB HBM3",
+  "datos": "datos/test.jsonl",
+  "intentos": 4,
+  "tokens_pensamiento": 3400,
+  "tokens_respuesta": 200,
+  "temperatura": 0.7,
+  "razonar": true,
+  "prompt": "El de prompt.py (inglés)",
+  "fecha": "2026-11-24"
+}

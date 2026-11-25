@@ -1,0 +1,65 @@
+modelo,nivel,Óptimo,Sobre el mejor atajo,Sin superar los atajos,Inválido
+DeepSeek R1 Distill 1.5B,1,0.325,0.0,0.625,0.05
+DeepSeek R1 Distill 1.5B,2,0.2375,0.025,0.675,0.0625
+DeepSeek R1 Distill 1.5B,3,0.125,0.1,0.775,0.0
+DeepSeek R1 Distill 1.5B,4,0.0,0.0375,0.9625,0.0
+DeepSeek R1 Distill 1.5B,5,0.0,0.025,0.9625,0.0125
+DeepSeek R1 Distill 1.5B,6,0.0,0.0,0.9875,0.0125
+DeepSeek R1 Distill 1.5B,7,0.0,0.0,0.975,0.025
+DeepSeek R1 Distill 1.5B,8,0.0,0.0,1.0,0.0
+Llama 3.2 1B,1,0.2875,0.0,0.7125,0.0
+Llama 3.2 1B,2,0.1875,0.0,0.8125,0.0
+Llama 3.2 1B,3,0.0,0.1,0.9,0.0
+Llama 3.2 1B,4,0.0,0.0375,0.9625,0.0
+Llama 3.2 1B,5,0.0,0.0,1.0,0.0
+Llama 3.2 1B,6,0.0,0.0,1.0,0.0
+Llama 3.2 1B,7,0.0,0.0,1.0,0.0
+Llama 3.2 1B,8,0.0,0.0,1.0,0.0
+Ministral 3 3B Reasoning 4bit,1,0.875,0.0,0.0375,0.0875
+Ministral 3 3B Reasoning 4bit,2,0.675,0.05,0.125,0.15
+Ministral 3 3B Reasoning 4bit,3,0.5,0.1125,0.275,0.1125
+Ministral 3 3B Reasoning 4bit,4,0.1875,0.15,0.4875,0.175
+Ministral 3 3B Reasoning 4bit,5,0.1,0.1375,0.6125,0.15
+Ministral 3 3B Reasoning 4bit,6,0.0,0.0,0.7375,0.2625
+Ministral 3 3B Reasoning 4bit,7,0.0,0.0,0.975,0.025
+Ministral 3 3B Reasoning 4bit,8,0.0,0.0,0.975,0.025
+Ministral 3 3B Reasoning bf16,1,0.825,0.0,0.0875,0.0875
+Ministral 3 3B Reasoning bf16,2,0.8875,0.0125,0.0625,0.0375
+Ministral 3 3B Reasoning bf16,3,0.5125,0.1125,0.1625,0.2125
+Ministral 3 3B Reasoning bf16,4,0.2125,0.1375,0.3375,0.3125
+Ministral 3 3B Reasoning bf16,5,0.15,0.1125,0.325,0.4125
+Ministral 3 3B Reasoning bf16,6,0.0125,0.0,0.5625,0.425
+Ministral 3 3B Reasoning bf16,7,0.0,0.025,0.525,0.45
+Ministral 3 3B Reasoning bf16,8,0.0,0.0,0.4125,0.5875
+Ministral 3 3B SFT Qwen,1,0.9625,0.0,0.0375,0.0
+Ministral 3 3B SFT Qwen,2,0.825,0.0375,0.1375,0.0
+Ministral 3 3B SFT Qwen,3,0.8375,0.05,0.1125,0.0
+Ministral 3 3B SFT Qwen,4,0.55,0.175,0.2625,0.0125
+Ministral 3 3B SFT Qwen,5,0.25,0.2625,0.4625,0.025
+Ministral 3 3B SFT Qwen,6,0.0375,0.1625,0.7,0.1
+Ministral 3 3B SFT Qwen,7,0.0,0.0125,0.875,0.1125
+Ministral 3 3B SFT Qwen,8,0.0,0.0,0.875,0.125
+Ministral 3 3B SFT solver masivo,1,1.0,0.0,0.0,0.0
+Ministral 3 3B SFT solver masivo,2,0.9875,0.0,0.0125,0.0
+Ministral 3 3B SFT solver masivo,3,0.9125,0.075,0.0125,0.0
+Ministral 3 3B SFT solver masivo,4,0.95,0.05,0.0,0.0
+Ministral 3 3B SFT solver masivo,5,0.8625,0.075,0.0625,0.0
+Ministral 3 3B SFT solver masivo,6,0.375,0.5125,0.1125,0.0
+Ministral 3 3B SFT solver masivo,7,0.2125,0.6375,0.15,0.0
+Ministral 3 3B SFT solver masivo,8,0.0125,0.6375,0.35,0.0
+OLMo 2 1B,1,0.275,0.0,0.575,0.15
+OLMo 2 1B,2,0.225,0.0,0.6125,0.1625
+OLMo 2 1B,3,0.0,0.05,0.6875,0.2625
+OLMo 2 1B,4,0.0,0.0375,0.6625,0.3
+OLMo 2 1B,5,0.0,0.0,0.6,0.4
+OLMo 2 1B,6,0.0,0.0,0.6625,0.3375
+OLMo 2 1B,7,0.0,0.0,0.675,0.325
+OLMo 2 1B,8,0.0,0.0,0.7125,0.2875
+Qwen 3.5 2B,1,0.2875,0.0,0.6875,0.025
+Qwen 3.5 2B,2,0.175,0.0125,0.75,0.0625
+Qwen 3.5 2B,3,0.0125,0.0125,0.9375,0.0375
+Qwen 3.5 2B,4,0.0,0.025,0.925,0.05
+Qwen 3.5 2B,5,0.0,0.0125,0.9375,0.05
+Qwen 3.5 2B,6,0.0,0.0,0.95,0.05
+Qwen 3.5 2B,7,0.0,0.0,0.9375,0.0625
+Qwen 3.5 2B,8,0.0,0.0,0.95,0.05

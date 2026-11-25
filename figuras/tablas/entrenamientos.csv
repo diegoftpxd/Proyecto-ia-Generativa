@@ -1,0 +1,3 @@
+entrenamiento,datos,épocas,lote efectivo,rango LoRA,learning rate,pasos,pérdida validación inicial,pérdida validación final
+05_sft_ministral,datos/sft.jsonl,3.0,16,64,0.0001,87,0.3790662288665771,0.2984090149402618
+07_sft_ministral_solver_masivo,datos/sft_solver_masivo.jsonl,1.0,32,64,0.0001,194,0.0736763179302215,0.0187936276197433

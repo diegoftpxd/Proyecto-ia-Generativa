@@ -1,0 +1,16 @@
+{
+  "modelo": "Ministral 3 3B Reasoning bf16",
+  "archivo": "baseline_test.jsonl",
+  "modelo_base": "mistralai/Ministral-3-3B-Reasoning-2512",
+  "adaptador": null,
+  "ejecucion": "Transformers en bf16",
+  "hardware": "NVIDIA H100 80GB HBM3",
+  "datos": "datos/test.jsonl",
+  "intentos": 4,
+  "tokens_pensamiento": 3400,
+  "tokens_respuesta": 200,
+  "temperatura": 0.7,
+  "razonar": true,
+  "prompt": "El de prompt.py (inglés)",
+  "fecha": "2026-11-24"
+}
