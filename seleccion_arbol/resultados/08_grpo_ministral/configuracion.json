@@ -1,0 +1,26 @@
+{
+  "modelo": "mistralai/Ministral-3-3B-Reasoning-2512",
+  "sft": "resultados/07_sft_ministral_solver_masivo/final",
+  "datos": "datos/entrenamiento.jsonl",
+  "niveles": [
+    5,
+    6,
+    7,
+    8
+  ],
+  "salida": "resultados/08_grpo_ministral",
+  "pasos": 300,
+  "problemas": 16,
+  "generaciones": 8,
+  "lote_generacion": 128,
+  "tokens": 2048,
+  "temperatura": 1.0,
+  "tasa": 1e-05,
+  "calentamiento": 10,
+  "beta": 0.0,
+  "micro_lote": 4,
+  "rango_lora": 64,
+  "pasos_guardado": 20,
+  "checkpoints_maximos": 3,
+  "semilla": 0
+}

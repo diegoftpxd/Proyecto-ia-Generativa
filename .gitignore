@@ -5,7 +5,19 @@ DesafioInvestigacion-2026.md
 ProyectoCurso-2026.pdf
 ProyectoCurso-2026.md
 
-# Checkpoints de entrenamiento (pesados; el adaptador final queda en final/)
-seleccion_arbol/resultados/*/checkpoint-*/
+# Pesos de modelos y adaptadores: nunca se suben, quedan en el clúster. De final/ se sube solo la
+# configuración (adapter_config.json, tekken.json, training_args.bin), no los pesos.
+*.safetensors
+*.bin
+!training_args.bin
+*.pt
+*.pth
+*.ckpt
+*.gguf
+*.onnx
+*.h5
+
+# Checkpoints de entrenamiento, en cualquier carpeta (SFT y GRPO)
+checkpoint-*/
 seleccion_arbol/slurm/logs/
 seleccion_arbol/datos/sft_solver_masivo.jsonl
