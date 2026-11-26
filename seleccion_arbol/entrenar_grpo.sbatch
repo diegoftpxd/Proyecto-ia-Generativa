@@ -3,6 +3,9 @@
 #   mkdir -p slurm/logs                     (una vez: Slurm no crea la carpeta de los logs)
 #   sbatch entrenar_grpo.sbatch
 #   sbatch --qos=debug --time=0:30:00 entrenar_grpo.sbatch --salida resultados/grpo_prueba --pasos 2 --problemas 2
+#   Desde el modelo base, sin SFT: razona mucho más largo, así que necesita más tokens y genera en tandas.
+#   sbatch entrenar_grpo.sbatch --sin-sft --salida resultados/09_grpo_ministral_base --niveles 2 3 4 5 6 \
+#       --tokens 3400 --lote-generacion 64 --micro-lote 2
 # Los argumentos van a entrenar_grpo.py. Si el trabajo se corta, volver a enviarlo con la misma --salida retoma
 # desde el último checkpoint. Las recompensas de cada paso y nivel quedan en <salida>/metricas.csv y recompensas.csv.
 #SBATCH --job-name=grpo-ministral

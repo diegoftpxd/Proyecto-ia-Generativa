@@ -9,10 +9,12 @@
 #     "matplotlib>=3.8",
 # ]
 # ///
-# GRPO con LoRA sobre Ministral 3 3B Reasoning ya ajustado con SFT (por defecto, el de solver masivo), en una GPU.
+# GRPO con LoRA sobre Ministral 3 3B Reasoning ya ajustado con SFT (por defecto, el de solver masivo) o, con
+# --sin-sft, sobre el modelo base. En una GPU.
 # Ejecutar desde esta carpeta:
 #   uv run entrenar_grpo.py                                              todo con los valores por defecto
 #   uv run entrenar_grpo.py --salida resultados/grpo_prueba --pasos 2 --problemas 2
+#   uv run entrenar_grpo.py --sin-sft --salida resultados/09_grpo_ministral_base ...   desde el modelo base
 # Si en la carpeta de salida ya hay checkpoints, retoma desde el último (útil si Slurm corta el trabajo).
 #
 # Cada paso:
@@ -60,6 +62,8 @@ def leer_argumentos() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="GRPO con LoRA sobre Ministral 3 3B Reasoning ajustado con SFT.")
     parser.add_argument("--modelo", default=MODELO, help="id en Hugging Face o carpeta local del modelo base")
     parser.add_argument("--sft", default=SFT, help="adaptador de entrenar_sft.py, que se fusiona antes de GRPO")
+    parser.add_argument("--sin-sft", dest="sft", action="store_const", const=None,
+                        help="parte del modelo base, sin fusionar ningún SFT")
     parser.add_argument("--datos", default="datos/entrenamiento.jsonl")
     # Con el SFT de solver masivo, los niveles 1 a 4 tienen pass@1 de 0,91 o más: casi todos sus grupos
     # tienen recompensas iguales y no aportan gradiente.
@@ -210,7 +214,7 @@ def guardar_grafico(metricas: list[dict], carpeta: Path) -> None:
         eje.set_xlabel("Paso de optimización")
         eje.grid(alpha=0.3)
         eje.legend()
-    figura.suptitle("GRPO de Ministral 3 3B Reasoning sobre el SFT")
+    figura.suptitle(f"GRPO de Ministral 3 3B Reasoning ({carpeta.name})")
     figura.tight_layout()
     figura.savefig(carpeta / "recompensa.png", dpi=120)
     plt.close(figura)
@@ -307,7 +311,7 @@ def optimizar(modelo, optimizador, secuencias, largos_prompt, ventaja, argumento
         pesos = torch.tensor([ventaja[i] for i in micro], device=dispositivo)[:, None]
         perdida = -pesos * actual
         if argumentos.beta > 0:
-            # El modelo sin el LoRA de GRPO es el SFT fusionado: sirve de referencia sin otra copia en memoria.
+            # El modelo sin el LoRA de GRPO es el de partida (SFT fusionado o base): sirve de referencia sin otra copia.
             with torch.no_grad(), modelo.disable_adapter():
                 referencia = log_probabilidades(modelo, ids, atencion, argumentos.temperatura)
             diferencia = referencia - actual
@@ -328,7 +332,7 @@ def main() -> None:
 
     if not torch.cuda.is_available():
         raise SystemExit("No hay GPU disponible: el entrenamiento necesita CUDA.")
-    if not (Path(argumentos.sft) / "adapter_config.json").exists():
+    if argumentos.sft and not (Path(argumentos.sft) / "adapter_config.json").exists():
         raise SystemExit(f"No hay un adaptador SFT en {argumentos.sft}: falta adapter_config.json.")
 
     dispositivo = torch.device("cuda", 0)
@@ -341,8 +345,9 @@ def main() -> None:
 
     tokenizador = AutoTokenizer.from_pretrained(argumentos.modelo)
     modelo = AutoModelForImageTextToText.from_pretrained(argumentos.modelo, dtype=torch.bfloat16)
-    # GRPO parte del modelo con el SFT fusionado y entrena un LoRA nuevo encima.
-    modelo = PeftModel.from_pretrained(modelo, argumentos.sft).merge_and_unload()
+    # GRPO parte del modelo con el SFT fusionado, o del modelo base con --sin-sft, y entrena un LoRA nuevo encima.
+    if argumentos.sft:
+        modelo = PeftModel.from_pretrained(modelo, argumentos.sft).merge_and_unload()
     modelo.config.use_cache = False
     modelo.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
     fin = {tokenizador.eos_token_id}
@@ -370,7 +375,7 @@ def main() -> None:
         estado = torch.load(ultimo / "estado.pt", map_location=dispositivo)
         optimizador.load_state_dict(estado["optimizador"])
         inicio = estado["paso"]
-    print(f"Retomando desde {ultimo}" if ultimo else "Empezando desde el SFT")
+    print(f"Retomando desde {ultimo}" if ultimo else f"Empezando desde {argumentos.sft or 'el modelo base, sin SFT'}")
 
     ruta_recompensas = salida / "recompensas.csv"
     ruta_metricas = salida / "metricas.csv"
